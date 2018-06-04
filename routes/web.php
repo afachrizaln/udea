@@ -14,3 +14,6 @@
 Route::get('/', function () {
     return view('welcome');
 });
+
+
+Route::get('/dashboard', 'UserController@dashboard')->name('dashboard');
