@@ -16,4 +16,8 @@ Route::get('/', function () {
 });
 
 
+Route::get('/login', 'UserController@login')->name('login');
+Route::get('/register', 'UserController@login')->name('register');
+Route::post('/login', 'UserController@postLogin')->name('postLogin');
+Route::get('/logout', 'UserController@postLogout')->name('postLogout');
 Route::get('/dashboard', 'UserController@dashboard')->name('dashboard');

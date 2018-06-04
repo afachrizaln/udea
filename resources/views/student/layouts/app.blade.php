@@ -1897,7 +1897,7 @@
             activeMenuClass: 'active', 
             ThemeBackgroundPattern: 'theme1', 
             HeaderBackground: 'theme2', 
-            LHeaderBackground: 'theme6', 
+            LHeaderBackground: 'theme2', 
             NavbarBackground: 'themelight1', 
             ActiveItemBackground: 'theme2', 
             freamtype: 'theme2', 
