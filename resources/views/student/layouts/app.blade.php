@@ -135,12 +135,13 @@
 
 											</a>
 										</li>
+										<form action="{{ route('postLogout') }}" method="POST" id="logout-form">
 										<li>
-											<a href="auth-normal-sign-in.html">
+											<a href="#" onclick="document.getElementById('logout-form').submit()">
 												<i class="feather icon-log-out"></i> Keluar
-
 											</a>
 										</li>
+										</form>
 									</ul>
 								</div>
 							</li>
@@ -230,8 +231,8 @@
 										<span class="pcoded-mtext">Beranda</span>
 									</a>
 								</li>
-								<li class="{{ \Request::route()->getName() == 'material' ? 'active ' : '' }}">
-									<a href="javascript:void(0)" class="waves-effect waves-dark">
+								<li class="{{ \Request::route()->getName() == 'course' ? 'active ' : '' }}">
+									<a href="{{ route('course') }}" class="waves-effect waves-dark">
 										<span class="pcoded-micon"><i class="feather icon-book"></i></span>
 										<span class="pcoded-mtext">Materi</span>
 									</a>
@@ -264,7 +265,7 @@
 									</a>
 								</li>
 								<li class=" ">
-									<a href="javascript:void(0)" class="waves-effect waves-dark">
+									<a href="javascript:void(0)" onclick="document.getElementById('logout-form').submit()" class="waves-effect waves-dark">
 										<span class="pcoded-micon"><i class="feather icon-log-out"></i></span>
 										<span class="pcoded-mtext">Keluar</span>
 									</a>
