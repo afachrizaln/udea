@@ -15,11 +15,15 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::group(['middleware' => 'visitor'], function() {
+    Route::get('/login', 'UserController@login')->name('login');
+    Route::get('/register', 'UserController@login')->name('register');
+    Route::post('/login', 'UserController@postLogin')->name('postLogin');
+});
 
-Route::get('/login', 'UserController@login')->name('login');
-Route::get('/register', 'UserController@login')->name('register');
-Route::post('/login', 'UserController@postLogin')->name('postLogin');
-Route::post('/logout', 'UserController@postLogout')->name('postLogout');
-Route::get('/dashboard', 'UserController@dashboard')->name('dashboard');
+Route::group(['middleware' => 'user'], function() {
+    Route::post('/logout', 'UserController@postLogout')->name('postLogout');
+    Route::get('/dashboard', 'UserController@dashboard')->name('dashboard');
+});
 
 Route::get('/course', 'Student\CourseController@index')->name('course');
