@@ -9,7 +9,7 @@ $('#pcoded').pcodedmenu({
     HeaderBackground: 'theme2', 
     LHeaderBackground: 'theme6', 
     NavbarBackground: 'themelight1', 
-    ActiveItemBackground: 'theme6', 
+    ActiveItemBackground: 'theme2', 
     freamtype: 'theme2', 
     SubItemBorder: false, 
     DropDownIconStyle: 'style1', 

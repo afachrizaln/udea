@@ -60,6 +60,11 @@ class UsersTableSeeder extends Seeder
     }
 
     public function createLecturer()
+    {
+        $this->createDefaultLecturer();
+    }
+
+    public function createDefaultLecturer()
     {   
         $credentials = [
 			'no_academic' => '225225',
@@ -71,10 +76,48 @@ class UsersTableSeeder extends Seeder
 
         $user = Sentinel::registerAndActivate($credentials);
         $role = Sentinel::findRoleBySlug('lecturer');
-		$user->roles()->attach($role);
+        $user->roles()->attach($role);
+        
+        DB::table('lecturers')->insert([
+            'user_id' => '2',
+            'code' => 'AKB'
+        ]);
     }
 
     public function createStudent()
+    {
+        $this->createDefaultStudent();
+
+        $gender = array("M","F");  
+        $religion = array("Islam","Kristen Protestan","Kristen Katolik", "Hindu", "Budha");   
+        foreach (range(4,12) as $index) {
+            $faker = Faker::create();
+            $credentials = [
+                'no_academic' => str_pad($index, 6, '0', STR_PAD_LEFT),
+                'email' => $faker->email,
+                'password' => 'student1234',
+                'first_name' => $faker->firstName,
+                'last_name' => $faker->lastName,
+            ];
+    
+            $user = Sentinel::registerAndActivate($credentials);
+            $role = Sentinel::findRoleBySlug('student');
+            $user->roles()->attach($role);
+            
+            DB::table('students')->insert([
+                'user_id' => $index,
+                'birth_date' => $faker->dateTimeBetween($startDate = '-30 years', $endDate = 'now')->format('Y-m-d'),
+                'address' => $faker->streetAddress,
+                'city' => 'Jayapura',
+                'province' => 'Papua',
+                'gender' => $gender[array_rand($gender)],
+                'religion' => $religion[array_rand($religion)],
+                'phone' => $faker->phoneNumber,
+            ]);
+        }
+    }
+
+    public function createDefaultStudent()
     {
 		$credentials = [
 			'no_academic' => '111111',
@@ -97,37 +140,9 @@ class UsersTableSeeder extends Seeder
             'address' => $faker->streetAddress,
             'city' => 'Jayapura',
             'province' => 'Papua',
-            'gender' => $gender[array_rand($gender)],
-            'religion' => $religion[array_rand($religion)],
+            'gender' => 'M',
+            'religion' => 'Islam',
             'phone' => $faker->phoneNumber,
         ]);
-
-        foreach (range(4,30) as $index) {
-            $credentials = [
-                'no_academic' => str_pad($index, 6, '0', STR_PAD_LEFT),
-                'email' => $faker->email,
-                'password' => 'student1234',
-                'first_name' => $faker->firstName,
-                'last_name' => $faker->lastName,
-            ];
-    
-            $user = Sentinel::registerAndActivate($credentials);
-            $role = Sentinel::findRoleBySlug('student');
-            $user->roles()->attach($role);
-            
-            $faker = Faker::create();
-            $gender = array("M","F");  
-            $religion = array("Islam","Kristen Protestan","Kristen Katolik", "Hindu", "Budha");
-            DB::table('students')->insert([
-                'user_id' => $index,
-                'birth_date' => $faker->dateTimeBetween($startDate = '-30 years', $endDate = 'now')->format('Y-m-d'),
-                'address' => $faker->streetAddress,
-                'city' => 'Jayapura',
-                'province' => 'Papua',
-                'gender' => $gender[array_rand($gender)],
-                'religion' => $religion[array_rand($religion)],
-                'phone' => $faker->phoneNumber,
-            ]);
-        }
     }
 }

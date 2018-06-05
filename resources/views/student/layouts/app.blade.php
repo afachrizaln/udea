@@ -30,6 +30,7 @@
 	@yield('styles')
 	<!-- Style.css -->
 	<link rel="stylesheet" type="text/css" href="{{ asset('ablepro/assets/css/style.css') }}">
+	<link rel="stylesheet" type="text/css" href="{{ asset('css/my_custom.css') }}">
 </head>
 
 <body >

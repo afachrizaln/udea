@@ -1,0 +1,23 @@
+a:focus, a:hover {
+    text-decoration: none;
+    color: #FF7814;
+}
+
+.color-accordion-block a.ui-state-active, .color-accordion-block a:focus, .color-accordion-block a:hover{
+    color: #fff;
+    background: #424242;
+}
+
+.accordion-msg {
+    font-size: 0.6em;
+}
+
+.table.table-xs {
+    font-size: 0.8em;
+}
+
+@media only screen and (max-width: 767px) {
+    .table.table-xs {
+        margin-top: 1.5em;
+    }
+}
