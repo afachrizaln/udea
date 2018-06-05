@@ -1,5 +1,11 @@
 @extends('student.layouts.app')
 
+@section('styles')
+<!-- Calender css -->
+<link rel="stylesheet" type="text/css" href="{{ asset('ablepro/bower_components/fullcalendar/css/fullcalendar.css') }}">
+<link rel="stylesheet" type="text/css" href="{{ asset('ablepro/bower_components/fullcalendar/css/fullcalendar.print.css') }}" media='print'>
+@endsection
+
 @section('navigation')
 <!-- [ navigation menu ] end -->
 <div class="pcoded-content">
@@ -48,10 +54,11 @@
                                     </div>
                                 </div>
                                 <div class="card-block">
-                                    <p>
-                                        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor
-                                        in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
-                                    </p>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div id='calendar'></div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -62,4 +69,11 @@
         </div>
     </div>
 </div>
+@endsection
+
+@section('scripts')
+<!-- calender js -->
+<script type="text/javascript" src="{{ asset('ablepro/bower_components/moment/js/moment.min.js') }}"></script>
+<script type="text/javascript" src="{{ asset('ablepro/bower_components/fullcalendar/js/fullcalendar.min.js') }}"></script>
+<script type="text/javascript" src="{{ asset('ablepro/assets/pages/full-calender/calendar.js') }}"></script>
 @endsection
