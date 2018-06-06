@@ -3,12 +3,16 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-use App\Chapter;
 
 class Course extends Model
 {
     public function chapter()
 	{
-		return $this->hasMany(Chapter::class, 'course_id');
+		return $this->hasMany('App\Chapter');
+	}
+
+	public function student()
+	{
+		return $this->belongsToMany('App\Student', 'student_courses');
 	}
 }

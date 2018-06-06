@@ -12,16 +12,16 @@
             <div class="row align-items-center">
                 <div class="col-md-8">
                     <div class="page-header-title">
-                        <h4 class="m-b-10">Materi</h4>
+                        <h4 class="m-b-10">Diskusi</h4>
                     </div>
                     <ul class="breadcrumb">
                         <li class="breadcrumb-item">
                             <a href="index.html">
-                                    <i class="feather icon-book"></i>
+                                    <i class="feather icon-message-circle"></i>
                                 </a>
                         </li>
                         <li class="breadcrumb-item">
-                            <a href="#!">Materi</a>
+                            <a href="#!">Diskusi</a>
                         </li>
                     </ul>
                 </div>
@@ -56,34 +56,39 @@
                                                                 {{ $rowCourse->description }}
                                                             </p>
                                                         </div>
-                                                        @foreach($rowCourse->chapter as $keyChapter => $rowChapter)
                                                         <div class="m-b-20">
-                                                            <h6 class="sub-title m-b-15">Bab. {{ $rowChapter->title }}</h6>
                                                             <div class="row">
-                                                                <div class="col-md-4">
-                                                                        <p align="justify">
-                                                                            {{ $rowChapter->description }}
-                                                                        </p>
-                                                                </div>
-                                                                <div class="col-md-8">
-                                                                    <div class="table-responsive">
-                                                                        <table class="table b-solid requid-table table-xs">
-                                                                            <tbody class="text-center text-muted">
-                                                                                @foreach($rowChapter->subChapter as $keySubChapter => $rowSubChapter)
+                                                                <div class="table-responsive">
+                                                                    <table class="table table-bordered table-xs">
+                                                                        <tbody class="text-center text-muted">
+                                                                            @foreach($rowCourse->chapter as $keyChapter => $rowChapter)
+                                                                            
+                                                                                @if($rowChapter->discussion->count() != 0)
                                                                                 <tr>
-                                                                                    <td>{{ ($keyChapter+1) . '.' . ($keySubChapter+1) }}</td>
-                                                                                    <td>{{ $rowSubChapter->title }}</td>
-                                                                                    <td> <i class="icofont icofont-ui-calendar"></i>&nbsp; {{ $rowSubChapter->created_at }}</td>
-                                                                                    <td><a href="#"><i class="feather icon-download"></i></a></td>
+                                                                                    <td rowspan="{{ $rowChapter->discussion->count()+1 }}">{{ ($keyChapter+1) }}</td>
+                                                                                    <td rowspan="{{ $rowChapter->discussion->count()+1 }}">{{ $rowChapter->title }}</td>
+                                                                                </tr>
+                                                                                @else
+                                                                                    <tr>
+                                                                                        <td>{{ ($keyChapter+1) }}</td>
+                                                                                        <td>{{ $rowChapter->title }}</td>
+                                                                                        <td><i>Belum ada diskusi</i></td>
+                                                                                    </tr>
+                                                                                @endif
+                                                                                
+                                                                                @foreach($rowChapter->discussion as $keyDiscussion => $rowDiscussion)
+                                                                                <tr>
+                                                                                    <td> <i class="icofont icofont-ui-calendar"></i>&nbsp; {{ $rowDiscussion->created_at }}</td>
+                                                                                    <td>{{ $rowDiscussion->title }}</td>
                                                                                 </tr>
                                                                                 @endforeach
-                                                                            </tbody>
-                                                                        </table>
-                                                                    </div>
+                                                                                    
+                                                                            @endforeach
+                                                                        </tbody>
+                                                                    </table>
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                        @endforeach
                                                     </div>
                                                 </div>
                                             </div>

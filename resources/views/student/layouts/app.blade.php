@@ -126,7 +126,7 @@
 								<div class="dropdown-primary dropdown">
 									<div class="dropdown-toggle" data-toggle="dropdown">
 										<img src="{{ asset('ablepro/assets/images/avatar-4.jpg') }}" class="img-radius" alt="User-Profile-Image">
-										<span>John Doe</span>
+										<span>{{ Sentinel::getUser()->name }}</span>
 										<i class="feather icon-chevron-down"></i>
 									</div>
 									<ul class="show-notification profile-notification dropdown-menu" data-dropdown-in="fadeIn" data-dropdown-out="fadeOut">
@@ -220,7 +220,7 @@
 								<div class="main-menu-header">
 									<img class="img-menu-user img-radius" src="{{ asset('ablepro/assets/images/avatar-4.jpg') }}" alt="User-Profile-Image">
 									<div class="user-details">
-										<p id="more-details">John Doe</p>
+										<p id="more-details">{{ Sentinel::getUser()->name }}</p>
 									</div>
 								</div>
 							</div>
@@ -239,7 +239,7 @@
 									</a>
 								</li>
 								<li class="{{ \Request::route()->getName() == 'discussion' ? 'active ' : '' }}">
-									<a href="javascript:void(0)" class="waves-effect waves-dark">
+									<a href="{{ route('discussion') }}" class="waves-effect waves-dark">
 										<span class="pcoded-micon"><i class="feather icon-message-circle"></i></span>
 										<span class="pcoded-mtext">Diskusi</span>
 									</a>

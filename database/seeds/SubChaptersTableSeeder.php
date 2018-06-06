@@ -24,6 +24,7 @@ class SubChaptersTableSeeder extends Seeder
                     'title' => 'Sub Bab ' . $index,
                     'chapter_id' => $index_parent+1,
                     'description' => $faker->realText($maxNbChars = 20, $indexSize = 2),
+                    'created_at' => $faker->dateTimeBetween($startDate = 'now', $endDate = 'now'),
                 ]);
             }
         }

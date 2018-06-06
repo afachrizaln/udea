@@ -23,6 +23,7 @@ class CoursesTableSeeder extends Seeder
             DB::table('courses')->insert([
                 'title' => $title[$index],
                 'description' => $faker->realText($maxNbChars = 400, $indexSize = 2),
+                'created_at' => $faker->dateTimeBetween($startDate = 'now', $endDate = 'now'),
             ]);
         }
     }

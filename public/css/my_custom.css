@@ -10,10 +10,21 @@ a:focus, a:hover {
 
 .accordion-msg {
     font-size: 0.6em;
+    font-weight: 600;
+}
+
+.card .card-block .sub-title {
+    font-weight: bold;
 }
 
 .table.table-xs {
     font-size: 0.8em;
+    width: 100%;
+}
+
+.table.table-xs td{
+    vertical-align: middle;
+    text-align: left;
 }
 
 @media only screen and (max-width: 767px) {

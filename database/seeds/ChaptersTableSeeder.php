@@ -26,6 +26,7 @@ class ChaptersTableSeeder extends Seeder
                 'title' => $title[$index],
                 'course_id' => '1',
                 'description' => $faker->realText($maxNbChars = 300, $indexSize = 2),
+                'created_at' => $faker->dateTimeBetween($startDate = 'now', $endDate = 'now'),
             ]);
         }
     }
@@ -39,6 +40,7 @@ class ChaptersTableSeeder extends Seeder
                 'title' => $title[$index],
                 'course_id' => '2',
                 'description' => $faker->realText($maxNbChars = 220, $indexSize = 2),
+                'created_at' => $faker->dateTimeBetween($startDate = 'now', $endDate = 'now'),
             ]);
         }
     }
@@ -52,6 +54,7 @@ class ChaptersTableSeeder extends Seeder
                 'title' => $title[$index],
                 'course_id' => '3',
                 'description' => $faker->realText($maxNbChars = 130, $indexSize = 2),
+                'created_at' => $faker->dateTimeBetween($startDate = 'now', $endDate = 'now'),
             ]);
         }
     }
