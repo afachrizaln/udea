@@ -27,4 +27,5 @@ Route::group(['middleware' => 'user'], function() {
 
     Route::get('/course', 'Student\CourseController@index')->name('course');
     Route::get('/discussion', 'Student\DiscussionController@index')->name('discussion');
+    Route::get('/discussion/{id}', 'Student\DiscussionController@show')->name('discussion.show');
 });

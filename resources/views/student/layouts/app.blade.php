@@ -3,7 +3,7 @@
 <html lang="en">
 
 <head>
-	<title>Ablepro v7.0 bootstrap admin template by Phoenixcoded</title>
+	<title>Udea</title>
 	<!-- HTML5 Shim and Respond.js IE10 support of HTML5 elements and media queries -->
 	<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
 	<!--[if lt IE 10]>
@@ -27,9 +27,12 @@
 	<link rel="stylesheet" href="{{ asset('ablepro/assets/pages/waves/css/waves.min.css') }}" type="text/css" media="all">
 	<!-- feather icon -->
 	<link rel="stylesheet" type="text/css" href="{{ asset('ablepro/assets/icon/feather/css/feather.css') }}">
+	<!-- ico font -->
+	<link rel="stylesheet" type="text/css" href="{{ asset('ablepro/assets/icon/icofont/css/icofont.css') }}">
 	@yield('styles')
 	<!-- Style.css -->
 	<link rel="stylesheet" type="text/css" href="{{ asset('ablepro/assets/css/style.css') }}">
+	<link rel="stylesheet" type="text/css" href="{{ asset('ablepro/assets/css/pages.css') }}">
 	<link rel="stylesheet" type="text/css" href="{{ asset('css/my_custom.css') }}">
 </head>
 
@@ -91,7 +94,7 @@
 										</li>
 										<li>
 											<div class="media">
-												<img class="img-radius" src="../files/assets/images/avatar-4.jpg" alt="Generic placeholder image">
+												<img class="img-radius" src="{{ asset('ablepro/assets/images/avatar-4.jpg') }}" alt="Generic placeholder image">
 												<div class="media-body">
 													<h5 class="notification-user">John Doe</h5>
 													<p class="notification-msg">Lorem ipsum dolor sit amet, consectetuer elit.</p>
@@ -101,7 +104,7 @@
 										</li>
 										<li>
 											<div class="media">
-												<img class="img-radius" src="../files/assets/images/avatar-3.jpg" alt="Generic placeholder image">
+												<img class="img-radius" src="{{ asset('ablepro/assets/images/avatar-3.jpg') }}" alt="Generic placeholder image">
 												<div class="media-body">
 													<h5 class="notification-user">Joseph William</h5>
 													<p class="notification-msg">Lorem ipsum dolor sit amet, consectetuer elit.</p>
@@ -111,7 +114,7 @@
 										</li>
 										<li>
 											<div class="media">
-												<img class="img-radius" src="../files/assets/images/avatar-4.jpg" alt="Generic placeholder image">
+												<img class="img-radius" src="{{ asset('ablepro/assets/images/avatar-4.jpg') }}" alt="Generic placeholder image">
 												<div class="media-body">
 													<h5 class="notification-user">Sara Soudein</h5>
 													<p class="notification-msg">Lorem ipsum dolor sit amet, consectetuer elit.</p>
@@ -125,7 +128,7 @@
 							<li class="user-profile header-notification">
 								<div class="dropdown-primary dropdown">
 									<div class="dropdown-toggle" data-toggle="dropdown">
-										<img src="{{ asset('ablepro/assets/images/avatar-4.jpg') }}" class="img-radius" alt="User-Profile-Image">
+										<img src="{{ asset(Sentinel::getUser()->path_image) }}" class="img-radius" alt="User-Profile-Image">
 										<span>{{ Sentinel::getUser()->name }}</span>
 										<i class="feather icon-chevron-down"></i>
 									</div>
@@ -218,7 +221,7 @@
 						<div class="pcoded-inner-navbar main-menu">
 							<div class="">
 								<div class="main-menu-header">
-									<img class="img-menu-user img-radius" src="{{ asset('ablepro/assets/images/avatar-4.jpg') }}" alt="User-Profile-Image">
+									<img class="img-menu-user img-radius" src="{{ asset(Sentinel::getUser()->path_image) }}" alt="User-Profile-Image">
 									<div class="user-details">
 										<p id="more-details">{{ Sentinel::getUser()->name }}</p>
 									</div>

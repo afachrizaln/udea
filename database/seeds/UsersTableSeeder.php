@@ -52,6 +52,7 @@ class UsersTableSeeder extends Seeder
 			'email' => 'udea@mailinator.com',
             'password' => 'admin1234',
             'first_name' => 'Admin',
+            'image' => 'user (5).png'
 		];
 
         $user = Sentinel::registerAndActivate($credentials);
@@ -72,6 +73,7 @@ class UsersTableSeeder extends Seeder
             'password' => 'lecture1234',
             'first_name' => 'Akbar',
             'last_name' => 'Silo',
+            'image' => 'user (6).png'
 		];
 
         $user = Sentinel::registerAndActivate($credentials);
@@ -88,16 +90,20 @@ class UsersTableSeeder extends Seeder
     {
         $this->createDefaultStudent();
 
-        $gender = array("M","F");  
+        $gender = array("M","F");
         $religion = array("Islam","Kristen Protestan","Kristen Katolik", "Hindu", "Budha");   
+        $image_m = array("user (1).png", "user (2).png", "user (7).png", "user (8).png", "user (9).png");
+        $image_f = array("user (3).png", "user (4).png");
         foreach (range(4,12) as $index) {
             $faker = Faker::create();
+            $s_gender = $gender[array_rand($gender)];
             $credentials = [
                 'no_academic' => str_pad($index, 6, '0', STR_PAD_LEFT),
                 'email' => $faker->email,
                 'password' => 'student1234',
                 'first_name' => $faker->firstName,
                 'last_name' => $faker->lastName,
+                'image' => $s_gender == 'M' ? $image_m[array_rand($image_m)] : $image_f[array_rand($image_f)],
             ];
     
             $user = Sentinel::registerAndActivate($credentials);
@@ -110,10 +116,11 @@ class UsersTableSeeder extends Seeder
                 'address' => $faker->streetAddress,
                 'city' => 'Jayapura',
                 'province' => 'Papua',
-                'gender' => $gender[array_rand($gender)],
+                'gender' => $s_gender,
                 'religion' => $religion[array_rand($religion)],
                 'phone' => $faker->phoneNumber,
             ]);
+
         }
     }
 
@@ -125,6 +132,7 @@ class UsersTableSeeder extends Seeder
             'password' => 'student1234',
             'first_name' => 'Azwar',
             'last_name' => 'Rizali',
+            'image' => 'user (9).png'
 		];
 
         $user = Sentinel::registerAndActivate($credentials);

@@ -8,7 +8,7 @@ class User extends \Cartalyst\Sentinel\Users\EloquentUser
 {
     protected $loginNames = ['no_academic'];
 
-    protected $appends = ['name', 'image'];
+    protected $appends = ['name', 'path_image'];
 
     public function getNameAttribute()
 	{
@@ -16,20 +16,19 @@ class User extends \Cartalyst\Sentinel\Users\EloquentUser
         return $name;
     }
 
-    public function getImageAttribute()
+    public function getPathImageAttribute()
 	{
-        if($this->roles()->first()->slug == 'admin')
-            return $image = '/material/images/users/admin.png';
-            
-		if($this->gender == 'M')
-			$image = '/material/images/users/doctor-M.png';
-		else
-			$image = '/material/images/users/doctor-F.png';
-		return $image;
+        $path_image = '/images/' . $this->image;
+		return $path_image;
     }
     
     public function student()
 	{
 		return $this->hasOne('App\Student');
+    }
+    
+    public function discussion()
+	{
+		return $this->belongsToMany('App\Discussion', 'comments');
 	}
 }

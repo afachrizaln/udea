@@ -24,7 +24,29 @@ a:focus, a:hover {
 
 .table.table-xs td{
     vertical-align: middle;
-    text-align: left;
+}
+
+.title a {
+    display: block;
+    color: #007bff;
+}
+
+.title a:hover {
+    background: #FF7814;
+}
+
+.title a:focus {
+    background: #FF7814;
+}
+
+.action-icon a:hover {
+    color: #424242;
+    background: transparent;
+}
+
+.action-icon a:focus {
+    color: #424242;
+    background: transparent;
 }
 
 @media only screen and (max-width: 767px) {

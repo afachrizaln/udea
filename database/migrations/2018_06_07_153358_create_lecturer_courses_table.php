@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateDiscussionsTable extends Migration
+class CreateLecturerCoursesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,19 +13,16 @@ class CreateDiscussionsTable extends Migration
      */
     public function up()
     {
-        Schema::create('discussions', function (Blueprint $table) {
+        Schema::create('lecturer_courses', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('lecturer_id')->unsigned();
-            $table->integer('chapter_id')->unsigned();
-            $table->string('title');
-            $table->text('description');
-            $table->timestamp('closed_at');
+            $table->integer('course_id')->unsigned();
             $table->timestamps();
 
             $table->foreign('lecturer_id')->references('id')->on('lecturers')
 				->onUpdate('cascade')
                 ->onDelete('cascade');
-            $table->foreign('chapter_id')->references('id')->on('chapters')
+            $table->foreign('course_id')->references('id')->on('courses')
 				->onUpdate('cascade')
                 ->onDelete('cascade');
         });
@@ -38,6 +35,6 @@ class CreateDiscussionsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('discussions');
+        Schema::dropIfExists('lecturer_courses');
     }
 }
