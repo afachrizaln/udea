@@ -14,8 +14,8 @@ class DiscussionController extends Controller
         return view('student.pages.discussion.index', compact('courses'));
     }
 
-    public function show($id){
-        $discussion = Discussion::find($id);
+    public function show($slug){
+        $discussion = Discussion::where('slug', '=', $slug)->first();
         return view('student.pages.discussion.show', compact('discussion'));
     }
 }

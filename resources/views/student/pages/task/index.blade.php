@@ -12,16 +12,16 @@
             <div class="row align-items-center">
                 <div class="col-md-8">
                     <div class="page-header-title">
-                        <h4 class="m-b-10">Diskusi</h4>
+                        <h4 class="m-b-10">Tugas</h4>
                     </div>
                     <ul class="breadcrumb">
                         <li class="breadcrumb-item">
                             <a href="index.html">
-                                <i class="feather icon-message-circle"></i>
+                                <i class="feather icon-paperclip"></i>
                             </a>
                         </li>
                         <li class="breadcrumb-item">
-                            <a href="#!">Diskusi</a>
+                            <a href="#!">Tugas</a>
                         </li>
                     </ul>
                 </div>
@@ -64,10 +64,10 @@
                                                                             <tbody class="text-center text-muted">
                                                                                 @foreach($rowCourse->chapter as $keyChapter => $rowChapter)
                                                                                 
-                                                                                    @if($rowChapter->discussion->count() != 0)
+                                                                                    @if($rowChapter->task->count() != 0)
                                                                                     <tr>
-                                                                                        <td rowspan="{{ $rowChapter->discussion->count()+1 }}">{{ ($keyChapter+1) }}</td>
-                                                                                        <td rowspan="{{ $rowChapter->discussion->count()+1 }}" align="left">{{ $rowChapter->title }}</td>
+                                                                                        <td rowspan="{{ $rowChapter->task->count()+1 }}">{{ ($keyChapter+1) }}</td>
+                                                                                        <td rowspan="{{ $rowChapter->task->count()+1 }}" align="left">{{ $rowChapter->title }}</td>
                                                                                     </tr>
                                                                                     @else
                                                                                         <tr>
@@ -77,21 +77,22 @@
                                                                                         </tr>
                                                                                     @endif
                                                                                     
-                                                                                    @foreach($rowChapter->discussion as $keyDiscussion => $rowDiscussion)
+                                                                                    @foreach($rowChapter->task as $keyTask => $rowTask)
                                                                                     <tr>
-                                                                                        <td>{{ ($keyChapter+1) . '.'. ($keyDiscussion+1) }}</td>
+                                                                                        <td>{{ ($keyChapter+1) . '.'. ($keyTask+1) }}</td>
                                                                                         <td>
-                                                                                            <div class="{{ $rowDiscussion->hasEnded == true ? 'text-danger' : '' }}">
-                                                                                                <strong>{{ $rowDiscussion->hasEnded == true ? 'Expired' : 'Open' }}</strong>
+                                                                                            <div class="{{ $rowTask->hasEnded == true ? 'text-danger' : '' }}">
+                                                                                                <strong>{{ $rowTask->hasEnded == true ? 'Expired' : 'Open' }}</strong>
                                                                                             </div>
+                                                                                            
                                                                                         </td>
                                                                                         <td align="left">
-                                                                                            <div class="title"><a href="{{ route('discussion.show', $rowDiscussion->slug) }}">{{ $rowDiscussion->title }}</a></div>
-                                                                                            <div class="text-danger"> Deadline : {{ $rowDiscussion->closed_at_display }} </div>
-                                                                                            <div class="text"> Aktivitas : {{ $rowDiscussion->comment->count() }} komentar </div>
+                                                                                            <div class="title"><a href="{{ route('task.show', $rowTask->slug) }}">{{ $rowTask->title }}</a></div>
+                                                                                            <div class="text-danger"> Deadline : {{ $rowTask->closed_at_display }} </div>
+                                                                                            <div class="text"> Aktivitas : hey </div>
                                                                                         </td>
                                                                                         <td>
-                                                                                            <div class="action-icon"><a class="action" href="{{ route('discussion.show', $rowDiscussion->id) }}"><i class="{{ $rowDiscussion->hasEnded == true ? 'feather icon-eye' : 'feather icon-edit' }}"></i></a></div>
+                                                                                            <div class="action-icon"><a class="action" href="{{ route('discussion.show', $rowTask->id) }}"><i class="{{ $rowTask->hasEnded == true ? 'feather icon-eye' : 'feather icon-edit' }}"></i></a></div>
                                                                                         </td>
                                                                                     </tr>
                                                                                     @endforeach

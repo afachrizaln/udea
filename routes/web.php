@@ -27,5 +27,7 @@ Route::group(['middleware' => 'user'], function() {
 
     Route::get('/course', 'Student\CourseController@index')->name('course');
     Route::get('/discussion', 'Student\DiscussionController@index')->name('discussion');
-    Route::get('/discussion/{id}', 'Student\DiscussionController@show')->name('discussion.show');
+    Route::get('/discussion/{slug}', 'Student\DiscussionController@show')->name('discussion.show');
+    Route::get('/task', 'Student\TaskController@index')->name('task');
+    Route::get('/task/{slug}', 'Student\TaskController@show')->name('task.show');
 });

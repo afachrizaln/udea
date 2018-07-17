@@ -248,7 +248,7 @@
 									</a>
 								</li>
 								<li class="{{ \Request::route()->getName() == 'assignment' ? 'active ' : '' }}">
-									<a href="javascript:void(0)" class="waves-effect waves-dark">
+									<a href="{{ route('task') }}" class="waves-effect waves-dark">
 										<span class="pcoded-micon"><i class="feather icon-paperclip"></i></span>
 										<span class="pcoded-mtext">Tugas</span>
 									</a>

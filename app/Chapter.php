@@ -15,4 +15,9 @@ class Chapter extends Model
 	{
 		return $this->hasMany('App\Discussion');
 	}
+
+	public function task()
+	{
+		return $this->hasMany('App\Task');
+	}
 }

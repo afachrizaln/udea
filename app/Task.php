@@ -5,9 +5,9 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use Carbon\Carbon;
 
-class Discussion extends Model
+class Task extends Model
 {
-
+    
     protected $appends = ['created_at_display', 'has_ended'];
 
     public function getCreatedAtDisplayAttribute()
@@ -35,14 +35,9 @@ class Discussion extends Model
             $has_ended = true;
     	return $has_ended;
     }
-    
+
     public function lecturer()
     {
 		return $this->belongsTo('App\Lecturer');
-    }
-
-    public function comment()
-    {
-		return $this->hasMany('App\Comment');
     }
 }

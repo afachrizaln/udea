@@ -26,6 +26,7 @@ class ChaptersTableSeeder extends Seeder
                 'title' => $title[$index],
                 'course_id' => '1',
                 'description' => $faker->realText($maxNbChars = 300, $indexSize = 2),
+                'slug' => str_slug($title[$index], '-'),
                 'created_at' => $faker->dateTimeBetween($startDate = 'now', $endDate = 'now'),
             ]);
         }
@@ -34,12 +35,13 @@ class ChaptersTableSeeder extends Seeder
     public function createChapter2()
     {
         $faker = Faker::create();
-        $title = array("Sistem", "Perbandingan");
+        $title = array("Sistem Hukum", "Perbandingan Kekuasaan");
         foreach (range(0,1) as $index) {
             DB::table('chapters')->insert([
                 'title' => $title[$index],
                 'course_id' => '2',
                 'description' => $faker->realText($maxNbChars = 220, $indexSize = 2),
+                'slug' => str_slug($title[$index], '-'),
                 'created_at' => $faker->dateTimeBetween($startDate = 'now', $endDate = 'now'),
             ]);
         }
@@ -48,12 +50,13 @@ class ChaptersTableSeeder extends Seeder
     public function createChapter3()
     {
         $faker = Faker::create();
-        $title = array("Hukum yang Berlaku", "Kewajiban Pemerintah", "Perbandingan");
+        $title = array("Hukum yang Berlaku", "Kewajiban Pemerintah", "Perbandingan Orde");
         foreach (range(0,2) as $index) {
             DB::table('chapters')->insert([
                 'title' => $title[$index],
                 'course_id' => '3',
                 'description' => $faker->realText($maxNbChars = 130, $indexSize = 2),
+                'slug' => str_slug($title[$index], '-'),
                 'created_at' => $faker->dateTimeBetween($startDate = 'now', $endDate = 'now'),
             ]);
         }
