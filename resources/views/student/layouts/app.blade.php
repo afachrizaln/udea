@@ -229,31 +229,31 @@
 							</div>
 							<div class="pcoded-navigation-label">Akademik</div>
 							<ul class="pcoded-item pcoded-left-item">
-								<li class="{{ \Request::route()->getName() == 'dashboard' ? 'active ' : '' }}">
+								<li class="{{ request()->is('dashboard*') ? 'active ' : '' }}">
 									<a href="{{ route('dashboard') }}" class="waves-effect waves-dark">
 										<span class="pcoded-micon"><i class="feather icon-home"></i></span>
 										<span class="pcoded-mtext">Beranda</span>
 									</a>
 								</li>
-								<li class="{{ \Request::route()->getName() == 'course' ? 'active ' : '' }}">
+								<li class="{{ request()->is('course*') ? 'active ' : '' }}">
 									<a href="{{ route('course') }}" class="waves-effect waves-dark">
 										<span class="pcoded-micon"><i class="feather icon-book"></i></span>
 										<span class="pcoded-mtext">Materi</span>
 									</a>
 								</li>
-								<li class="{{ \Request::route()->getName() == 'discussion' ? 'active ' : '' }}">
+								<li class="{{ request()->is('discussion*') ? 'active ' : '' }}">
 									<a href="{{ route('discussion') }}" class="waves-effect waves-dark">
 										<span class="pcoded-micon"><i class="feather icon-message-circle"></i></span>
 										<span class="pcoded-mtext">Diskusi</span>
 									</a>
 								</li>
-								<li class="{{ \Request::route()->getName() == 'assignment' ? 'active ' : '' }}">
+								<li class="{{ request()->is('task*') ? 'active ' : '' }}">
 									<a href="{{ route('task') }}" class="waves-effect waves-dark">
 										<span class="pcoded-micon"><i class="feather icon-paperclip"></i></span>
 										<span class="pcoded-mtext">Tugas</span>
 									</a>
 								</li>
-								<li class=""{{ \Request::route()->getName() == 'Quis' ? 'active ' : '' }}"">
+								<li class=""{{ request()->is('quis*') ? 'active ' : '' }}"">
 									<a href="javascript:void(0)" class="waves-effect waves-dark">
 										<span class="pcoded-micon"><i class="feather icon-feather"></i></span>
 										<span class="pcoded-mtext">Kuis</span>
