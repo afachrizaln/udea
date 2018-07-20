@@ -78,16 +78,14 @@
                                                 <img class="media-object img-radius m-r-20" src="{{ asset(Sentinel::getUser()->path_image) }}" alt="Generic placeholder image">
                                             </a>
                                             <div class="media-body">
-                                                <form class="form-material right-icon-control">
+                                                <form class="form-material right-icon-control" action={{ route('discussion.comment', $discussion->slug) }} method="POST">
                                                     <div class="form-group form-default">
-                                                        <textarea class="form-control" required=""></textarea>
+                                                        <textarea name='comment' class="form-control" required></textarea>
                                                         <span class="form-bar"></span>
-                                                        <label class="float-label">Write something.....</label>
+                                                        <label class="float-label">Tulis sesuatu.....</label>
                                                     </div>
-                                                    <div class="form-icon ">
-                                                        <button class="btn btn-success btn-icon  waves-effect waves-light">
-                                                            <i class="fa fa-paper-plane "></i>
-                                                        </button>
+                                                    <div class="text-right">
+                                                        <button class="btn btn-primary m-b-0" type="submit">Kirim</button>
                                                     </div>
                                                 </form>
                                             </div>

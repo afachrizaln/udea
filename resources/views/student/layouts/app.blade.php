@@ -30,13 +30,19 @@
 	<!-- ico font -->
 	<link rel="stylesheet" type="text/css" href="{{ asset('ablepro/assets/icon/icofont/css/icofont.css') }}">
 	@yield('styles')
+	<!-- notify js Fremwork -->
+	<link rel="stylesheet" type="text/css" href="{{ asset('ablepro/bower_components/pnotify/css/pnotify.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('ablepro/bower_components/pnotify/css/pnotify.brighttheme.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('ablepro/bower_components/pnotify/css/pnotify.buttons.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('ablepro/bower_components/pnotify/css/pnotify.mobile.css') }}">
+	<link rel="stylesheet" type="text/css" href="{{ asset('ablepro/assets/pages/pnotify/notify.css') }}">
 	<!-- Style.css -->
 	<link rel="stylesheet" type="text/css" href="{{ asset('ablepro/assets/css/style.css') }}">
 	<link rel="stylesheet" type="text/css" href="{{ asset('ablepro/assets/css/pages.css') }}">
 	<link rel="stylesheet" type="text/css" href="{{ asset('css/my_custom.css') }}">
 </head>
 
-<body >
+<body {{ Session::has('message') ? 'data-notification=true' : '' }} data-notification-type='{{ Session::get('alert-type', 'info') }}' data-notification-message='{{ json_encode(Session::get('message')) }}'>
 	<!-- [ Pre-loader ] start -->
 	<div class="loader-bg">
 		<div class="loader-bar"></div>
@@ -341,7 +347,12 @@
 	{{-- <script src="{{ asset('ablepro/assets/js/vertical/vertical-layout.min.js') }}"></script> --}}
 	<!-- modernizr js -->
     <script type="text/javascript" src="{{ asset('ablepro/bower_components/modernizr/js/modernizr.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('ablepro/bower_components/modernizr/js/css-scrollbars.js') }}"></script>
+	<script type="text/javascript" src="{{ asset('ablepro/bower_components/modernizr/js/css-scrollbars.js') }}"></script>
+	<!-- pnotify js -->
+	<script type="text/javascript" src="{{ asset('ablepro/bower_components/pnotify/js/pnotify.js') }}"></script>
+	<script type="text/javascript" src="{{ asset('ablepro/bower_components/pnotify/js/pnotify.buttons.js') }}"></script>
+	<script type="text/javascript" src="{{ asset('ablepro/bower_components/pnotify/js/pnotify.mobile.js') }}"></script>
+	<script type="text/javascript" src="{{ asset('ablepro/assets/pages/pnotify/notify.js') }}"></script>
 	@yield('scripts')
 	<!-- Custom js -->
     <script type="text/javascript" src="{{ asset('ablepro/assets/js/script.min.js') }}"></script>

@@ -7,6 +7,12 @@ use Carbon\Carbon;
 
 class Comment extends Model
 {
+    protected $fillable = [
+		'user_id',
+		'discussion_id',
+		'comment',
+    ];
+    
     protected $appends = ['created_at_display'];
 
     public function getCreatedAtDisplayAttribute()
