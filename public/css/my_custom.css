@@ -5,7 +5,7 @@ a:focus, a:hover {
 
 .color-accordion-block a.ui-state-active, .color-accordion-block a:focus, .color-accordion-block a:hover{
     color: #fff;
-    background: #424242;
+    background: #FF7814;
 }
 
 .accordion-msg {
