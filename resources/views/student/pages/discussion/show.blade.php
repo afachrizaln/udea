@@ -94,8 +94,35 @@
                                 </div>
                             </div>
                         </div>
+
+                        <!-- Task-detail-right start -->
+                        <div class="col-sm-3 task-detail-right">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5 class="card-header-text"><i class="icofont icofont-clock-time m-r-10"></i>Waktu Diskusi</h5>
+                                </div>
+                                <div class="card-block">
+                                    @if(date('Y-m-d H:i:s') < $discussion->closed_at)
+                                        <div class="counter" data-countdown="{{ $discussion->closed_at }}">
+                                            <div>Batas Akhir</div>
+                                            <div>{{ $discussion->closed_at_display }}</div>
+                                            <div class="yourCountdownContainer"></div>
+                                            <!-- end of yourCountdown -->
+                                        </div>
+                                        <!-- end of counter -->
+                                    @else
+                                        <div class="counter">
+                                            <div>Batas Akhir</div>
+                                            <div class="text-danger">{{ $discussion->closed_at_display }}</div>
+                                            <div class="text-danger">Waktu habis</div>
+                                        </div>
+                                    @endif
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     <!-- [ page content ] end -->
+
                 </div>
             </div>
         </div>
@@ -106,4 +133,23 @@
 @section('scripts')
 <!-- Accordion js -->
 <script type="text/javascript" src="{{ asset('ablepro/assets/pages/accordion/accordion.js') }}"></script>
+<!-- counter js -->
+<script src="{{ asset('ablepro/bower_components/countdown/js/jquery.countdown.js') }}"></script>
+{{-- <script src="{{ asset('ablepro/assets/pages/counter/task-detail.js') }}"></script> --}}
+
+<script>
+$(document).ready(function() {
+    var finalDate = $('.counter').data('countdown');
+    $('.yourCountdownContainer').countdown({
+        date: finalDate,
+        render: function (date) {
+            this.el.innerHTML = "<p>" + date.days  + " hari, " +
+                                this.leadingZeros(date.hours) + " jam " +
+                                this.leadingZeros(date.min) + " mnt " +
+                                this.leadingZeros(date.sec) + " dtk</p>";
+        }
+    });
+});
+</script>
+
 @endsection

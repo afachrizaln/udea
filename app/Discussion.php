@@ -8,7 +8,7 @@ use Carbon\Carbon;
 class Discussion extends Model
 {
 
-    protected $appends = ['created_at_display', 'has_ended'];
+    protected $appends = ['created_at_display', 'closed_at_display', 'has_ended'];
 
     public function getCreatedAtDisplayAttribute()
 	{
