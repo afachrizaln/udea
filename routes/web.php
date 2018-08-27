@@ -25,6 +25,8 @@ Route::group(['middleware' => 'user'], function() {
     Route::post('/logout', 'UserController@postLogout')->name('postLogout');
     Route::get('/dashboard', 'UserController@dashboard')->name('dashboard');
 
+    Route::post('/join', 'Student\ClassroomController@join')->name('classroom.join');
+
     Route::get('/course', 'Student\CourseController@index')->name('course');
     Route::get('/discussion', 'Student\DiscussionController@index')->name('discussion');
     Route::get('/discussion/{slug}', 'Student\DiscussionController@show')->name('discussion.show');

@@ -22,7 +22,7 @@ class ClassroomsTableSeeder extends Seeder
             'course_id' => '1',
             'lecturer_id' => '1',
             'name' => 'PIP-02',
-            'public_key' => 'public_key1'
+            'public_key' => 'public_key2'
         ]);
 
         DB::table('classrooms')->insert([
@@ -30,6 +30,20 @@ class ClassroomsTableSeeder extends Seeder
             'lecturer_id' => '1',
             'name' => 'SIP-01',
             'public_key' => 'public_key3'
+        ]);
+
+        DB::table('classrooms')->insert([
+            'course_id' => '3',
+            'lecturer_id' => '1',
+            'name' => 'OTD-01',
+            'public_key' => 'public_key4'
+        ]);
+
+        DB::table('classrooms')->insert([
+            'course_id' => '3',
+            'lecturer_id' => '1',
+            'name' => 'OTD-02',
+            'public_key' => 'public_key5'
         ]);
     }
 }

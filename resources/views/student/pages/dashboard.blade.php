@@ -74,25 +74,25 @@
                                     </div>
                                 </div>
                                 <div class="card-block">
-                                    <form>
+                                    <form action={{ route('classroom.join') }} method="POST">
                                         <div class="form-group row">
                                             <div class="col-sm-12">
-                                                <input type="text" class="form-control" placeholder="Masukkan kode kelas....">
+                                                <input type="text" class="form-control" name="public_key" placeholder="Masukkan kode kelas....">
                                             </div>
+                                        </div>
+
+                                        <div class="support-btn">
+                                            <button type="submit" class="btn waves-effect waves-light btn-primary btn-block"><i class="icofont icofont-life-buoy"></i> Gabung</a>
                                         </div>
                                     </form>
 
-                                    <div class="support-btn">
-                                        <a href="#!" class="btn waves-effect waves-light btn-primary btn-block"><i class="icofont icofont-life-buoy"></i> Gabung</a>
-                                    </div>
-                                    <ul class="nav navigation">
-                                        <li class="navigation-header"><i class="icon-history pull-right"></i> <b>Daftar Kelas</b></li>
+                                    <i class="icon-history pull-right"></i> <b>Daftar Kelas</b>
+                                    <ul class="nav navigation"><br>
+                                        @foreach($classrooms as $row)
                                         <li class="waves-effect waves-light">
-                                            <a href="#v_1_2">Version 1.2 <span class="text-muted text-regular pull-right">18.12.2017</span></a>
+                                            <a href="#v_1_2">{{ $row->name }}<span class="text-muted text-regular pull-right">{{ "(" . $row->course->title . ")" }}</span></a>
                                         </li>
-                                        <li class="waves-effect waves-light">
-                                            <a href="#v_1_0">Version 1.0 <span class="text-muted text-regular pull-right">1.11.2017</span></a>
-                                        </li>
+                                        @endforeach
                                         
                                     </ul>
                                 </div>

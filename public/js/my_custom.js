@@ -6,29 +6,31 @@
     
     var type = document.body.dataset.notificationType;
     var opts = {
-        title: "Over here",
-        text: JSON.parse(document.body.dataset.notificationMessage)
+        text: JSON.parse(document.body.dataset.notificationMessage),
     };
     switch (type) {
         case 'error':
+        opts.type = 'error';
         opts.title = "Terjadi Kesalahan!";
         opts.icon = "icofont icofont-close-circled",
-        opts.addclass = "stack-bottom-right bg-danger";
-        opts.delay = 2000;
+        opts.addclass = "translucent stack-bottom-right bg-danger";
+        opts.delay = 4000;
         break;
 
         case 'info':
+        opts.type = 'info';
         opts.title = "Info";
         opts.icon = "icofont icofont-info-circle",
-        opts.addclass = "stack-bottom-right bg-info";
-        opts.delay = 2000;
+        opts.addclass = "translucent stack-bottom-right bg-info";
+        opts.delay = 4000;
         break;
 
         case 'success':
-        opts.title = "Sukses";
+        opts.type = 'success';
+        opts.title = "Berhasil";
         opts.icon = "icofont icofont-check-circled",
-        opts.addclass = "stack-bottom-right bg-primary";
-        opts.delay = 2000;
+        opts.addclass = "translucent stack-bottom-right bg-primary";
+        opts.delay = 4000;
         break;
     }
     new PNotify(opts);

@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\MessageBag;
 use App\Exceptions\User\WrongCredentialException;
 use Cartalyst\Sentinel\Checkpoints\ThrottlingException;
+use App\Classroom;
 use Sentinel;
 
 class UserController extends Controller
@@ -38,6 +39,7 @@ class UserController extends Controller
     }
 
     public function dashboard(){
-        return view('student.pages.dashboard', compact(''));
+        $classrooms = Classroom::get();
+        return view('student.pages.dashboard', compact('classrooms'));
     }
 }
