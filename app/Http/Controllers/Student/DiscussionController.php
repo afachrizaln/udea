@@ -11,8 +11,8 @@ use Sentinel;
 class DiscussionController extends Controller
 {
     public function index(){
-        $courses = Sentinel::getUser()->student->course;
-        return view('student.pages.discussion.index', compact('courses'));
+        $classrooms = Sentinel::getUser()->student->classrooms;
+        return view('student.pages.discussion.index', compact('classrooms'));
     }
 
     public function show($slug){

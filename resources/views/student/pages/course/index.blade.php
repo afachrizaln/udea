@@ -37,10 +37,11 @@
                     <div class="row">
                         <div class="col-sm-12">
                             <div class="card">
-                                @if($courses->isNotEmpty())
+                                @if($classrooms->isNotEmpty())
                                     <div class="card-block color-accordion-block">
                                         <div id="accordion" role="tablist">
-                                            @foreach($courses as $key => $rowCourse)
+                                            @foreach($classrooms as $key => $rowClassroom)
+                                            @php $rowCourse = $rowClassroom->course @endphp
                                             <div class="accordion-panel color-accordion">
                                                 <div class="accordion-heading" role="tab" id={{ 'heading' . $key }}>
                                                     <h3 class="card-title accordion-title">

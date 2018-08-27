@@ -10,8 +10,8 @@ use Sentinel;
 class TaskController extends Controller
 {
     public function index(){
-        $courses = Sentinel::getUser()->student->course;
-        return view('student.pages.task.index', compact('courses'));
+        $classrooms = Sentinel::getUser()->student->classrooms;
+        return view('student.pages.task.index', compact('classrooms'));
     }
 
     public function show($slug){

@@ -7,8 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 class Student extends Model
 {
 	
-	public function course()
+	public function classrooms()
 	{
-		return $this->belongsToMany('App\Course', 'student_courses');
+		return $this->belongsToMany('App\Classroom', 'classrooms_students');
 	}
 }

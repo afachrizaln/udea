@@ -9,7 +9,7 @@ use Sentinel;
 class CourseController extends Controller
 {
     public function index(){
-        $courses = Sentinel::getUser()->student->course;
-        return view('student.pages.course.index', compact('courses'));
+        $classrooms = Sentinel::getUser()->student->classrooms;
+        return view('student.pages.course.index', compact('classrooms'));
     }
 }
