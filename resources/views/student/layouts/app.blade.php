@@ -134,7 +134,7 @@
 							<li class="user-profile header-notification">
 								<div class="dropdown-primary dropdown">
 									<div class="dropdown-toggle" data-toggle="dropdown">
-										<img src="{{ asset(Sentinel::getUser()->path_image) }}" class="img-radius" alt="User-Profile-Image">
+										<img src="{{ Avatar::create(Sentinel::getUser()->name)->toBase64() }}"" class="img-radius" alt="User-Profile-Image">
 										<span>{{ Sentinel::getUser()->name }}</span>
 										<i class="feather icon-chevron-down"></i>
 									</div>
@@ -227,7 +227,7 @@
 						<div class="pcoded-inner-navbar main-menu">
 							<div class="">
 								<div class="main-menu-header">
-									<img class="img-menu-user img-radius" src="{{ asset(Sentinel::getUser()->path_image) }}" alt="User-Profile-Image">
+									<img class="img-menu-user img-radius" src="{{ Avatar::create(Sentinel::getUser()->name)->toBase64() }}" alt="User-Profile-Image">
 									<div class="user-details">
 										<p id="more-details">{{ Sentinel::getUser()->name }}</p>
 									</div>

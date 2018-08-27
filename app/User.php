@@ -16,11 +16,11 @@ class User extends \Cartalyst\Sentinel\Users\EloquentUser
         return $name;
     }
 
-    public function getPathImageAttribute()
-	{
-        $path_image = '/images/' . $this->image;
-		return $path_image;
-    }
+    // public function getPathImageAttribute()
+	// {
+    //     $path_image = '/images/' . $this->image;
+	// 	return $path_image;
+    // }
     
     public function student()
 	{

@@ -41,7 +41,7 @@
                                     <div class="media">
                                         <div class="media-left media-middle friend-box">
                                             <a href="#">
-                                                <img class="media-object img-radius m-r-20" src="{{ asset($discussion->lecturer->user->path_image) }}" alt="">
+                                                <img class="media-object img-radius m-r-20" src="{{ Avatar::create($discussion->lecturer->user->name)->toBase64() }}" alt="">
                                             </a>
                                         </div>
                                         <div class="media-body">
@@ -65,7 +65,7 @@
                                         @foreach($discussion->comment as $row)
                                         <div class="media">
                                             <a class="media-left" href="#">
-                                                <img class="media-object img-radius m-r-20" src="{{ asset($row->user->path_image) }}" alt="Generic placeholder image">
+                                                <img class="media-object img-radius m-r-20" src="{{ Avatar::create($row->user->name)->toBase64() }}" alt="Generic placeholder image">
                                             </a>
                                             <div class="media-body b-b-theme social-client-description">
                                                 <div class="chat-header">{{ $row->user->name }}<span class="text-muted">{{ $row->created_at_display }}</span></div>
@@ -75,7 +75,7 @@
                                         @endforeach
                                         <div class="media">
                                             <a class="media-left" href="#">
-                                                <img class="media-object img-radius m-r-20" src="{{ asset(Sentinel::getUser()->path_image) }}" alt="Generic placeholder image">
+                                                <img class="media-object img-radius m-r-20" src="{{ Avatar::create(Sentinel::getUser()->name)->toBase64() }}" alt="Generic placeholder image">
                                             </a>
                                             <div class="media-body">
                                                 <form class="form-material right-icon-control" action={{ route('discussion.comment', $discussion->slug) }} method="POST">
