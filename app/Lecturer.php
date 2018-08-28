@@ -10,7 +10,7 @@ class Lecturer extends Model
       	return $this->belongsTo('App\User');
 	}
 	
-	public function classroom()
+	public function classrooms()
 	{
 		return $this->hasMany('App\Classroom');
 	}

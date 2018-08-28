@@ -26,6 +26,11 @@ class User extends \Cartalyst\Sentinel\Users\EloquentUser
 	{
 		return $this->hasOne('App\Student');
     }
+
+    public function lecturer()
+	{
+		return $this->hasOne('App\Lecturer');
+    }
     
     public function discussion()
 	{
