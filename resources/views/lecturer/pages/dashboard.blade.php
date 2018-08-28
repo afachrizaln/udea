@@ -1,4 +1,4 @@
-@extends('student.layouts.app')
+@extends('lecturer.layouts.app')
 
 @section('styles')
 <!-- Calender css -->
@@ -74,18 +74,6 @@
                                     </div>
                                 </div>
                                 <div class="card-block">
-                                    <form action={{ route('student.classroom.join') }} method="POST">
-                                        <div class="form-group row">
-                                            <div class="col-sm-12">
-                                                <input type="text" class="form-control" name="public_key" placeholder="Masukkan kode kelas....">
-                                            </div>
-                                        </div>
-
-                                        <div class="support-btn">
-                                            <button type="submit" class="btn waves-effect waves-light btn-primary btn-block"><i class="icofont icofont-life-buoy"></i> Gabung</a>
-                                        </div>
-                                    </form>
-
                                     <i class="icon-history pull-right"></i> <b>Daftar Kelas</b>
                                     <ul class="nav navigation"><br>
                                         @foreach($classrooms as $row)

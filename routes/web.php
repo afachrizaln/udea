@@ -23,14 +23,24 @@ Route::group(['middleware' => 'visitor'], function() {
 
 Route::group(['middleware' => 'user'], function() {
     Route::post('/logout', 'UserController@postLogout')->name('postLogout');
-    Route::get('/dashboard', 'UserController@dashboard')->name('dashboard');
 
-    Route::post('/join', 'Student\ClassroomController@join')->name('classroom.join');
+    Route::group(['prefix' => 'student', 'middleware' => 'student'], function() {
+        Route::get('/dashboard', 'Student\DashboardController@index')->name('student.dashboard');
+        Route::post('/join', 'Student\ClassroomController@join')->name('student.classroom.join');
 
-    Route::get('/course', 'Student\CourseController@index')->name('course');
-    Route::get('/discussion', 'Student\DiscussionController@index')->name('discussion');
-    Route::get('/discussion/{slug}', 'Student\DiscussionController@show')->name('discussion.show');
-    Route::post('/discussion/{slug}/comment', 'Student\DiscussionController@comment')->name('discussion.comment');
-    Route::get('/task', 'Student\TaskController@index')->name('task');
-    Route::get('/task/{slug}', 'Student\TaskController@show')->name('task.show');
+        Route::get('/course', 'Student\CourseController@index')->name('student.course');
+        Route::get('/discussion', 'Student\DiscussionController@index')->name('student.discussion');
+        Route::get('/discussion/{slug}', 'Student\DiscussionController@show')->name('student.discussion.show');
+        Route::post('/discussion/{slug}/comment', 'Student\DiscussionController@comment')->name('student.discussion.comment');
+        Route::get('/task', 'Student\TaskController@index')->name('student.task');
+        Route::get('/task/{slug}', 'Student\TaskController@show')->name('student.task.show');
+    });
+
+    Route::group(['prefix' => 'lecturer', 'middleware' => 'lecturer'], function() {
+        Route::get('/dashboard', 'Lecturer\DashboardController@index')->name('lecturer.dashboard');
+
+        Route::get('/course', 'Lecturer\CourseController@index')->name('lecturer.course');
+        Route::get('/discussion', 'Lecturer\DiscussionController@index')->name('lecturer.discussion');
+        Route::get('/task', 'Lecturer\TaskController@index')->name('lecturer.task');
+    });
 });

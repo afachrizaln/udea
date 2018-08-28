@@ -87,12 +87,12 @@
                                                                                             </div>
                                                                                         </td>
                                                                                         <td align="left">
-                                                                                            <div class="title"><a href="{{ route('discussion.show', $rowDiscussion->slug) }}">{{ $rowDiscussion->title }}</a></div>
+                                                                                            <div class="title"><a href="{{ route('student.discussion.show', $rowDiscussion->slug) }}">{{ $rowDiscussion->title }}</a></div>
                                                                                             <div class="text-danger"> Deadline : {{ $rowDiscussion->closed_at_display }} </div>
                                                                                             <div class="text"> Aktivitas : {{ $rowDiscussion->comment->count() }} komentar </div>
                                                                                         </td>
                                                                                         <td>
-                                                                                            <div class="action-icon"><a class="action" href="{{ route('discussion.show', $rowDiscussion->id) }}"><i class="{{ $rowDiscussion->hasEnded == true ? 'feather icon-eye' : 'feather icon-edit' }}"></i></a></div>
+                                                                                            <div class="action-icon"><a class="action" href="{{ route('student.discussion.show', $rowDiscussion->id) }}"><i class="{{ $rowDiscussion->hasEnded == true ? 'feather icon-eye' : 'feather icon-edit' }}"></i></a></div>
                                                                                         </td>
                                                                                     </tr>
                                                                                     @endforeach

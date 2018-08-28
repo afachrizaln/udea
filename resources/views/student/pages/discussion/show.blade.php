@@ -78,7 +78,7 @@
                                                 <img class="media-object img-radius m-r-20" src="{{ Avatar::create(Sentinel::getUser()->name)->toBase64() }}" alt="Generic placeholder image">
                                             </a>
                                             <div class="media-body">
-                                                <form class="form-material right-icon-control" action={{ route('discussion.comment', $discussion->slug) }} method="POST">
+                                                <form class="form-material right-icon-control" action="{{ route('student.discussion.comment', $discussion->slug) }}" method="POST">
                                                     <div class="form-group form-default">
                                                         <textarea name='comment' class="form-control" required></textarea>
                                                         <span class="form-bar"></span>

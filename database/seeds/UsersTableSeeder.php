@@ -50,7 +50,7 @@ class UsersTableSeeder extends Seeder
         $credentials = [
 			'no_academic' => '121110',
 			'email' => 'udea@mailinator.com',
-            'password' => 'admin1234',
+            'password' => 'qwerty123',
             'first_name' => 'Admin',
 		];
 
@@ -69,7 +69,7 @@ class UsersTableSeeder extends Seeder
         $credentials = [
 			'no_academic' => '225225',
 			'email' => 'akbarsilo@mailinator.com',
-            'password' => 'lecture1234',
+            'password' => 'qwerty123',
             'first_name' => 'Akbar',
             'last_name' => 'Silo',
 		];
@@ -96,7 +96,7 @@ class UsersTableSeeder extends Seeder
             $credentials = [
                 'no_academic' => str_pad($index, 6, '0', STR_PAD_LEFT),
                 'email' => $faker->email,
-                'password' => 'student1234',
+                'password' => 'qwerty123',
                 'first_name' => $faker->firstName,
                 'last_name' => $faker->lastName,
             ];
@@ -124,7 +124,7 @@ class UsersTableSeeder extends Seeder
 		$credentials = [
 			'no_academic' => '111111',
 			'email' => 'student@mailinator.com',
-            'password' => 'student1234',
+            'password' => 'qwerty123',
             'first_name' => 'Azwar',
             'last_name' => 'Rizali',
 		];

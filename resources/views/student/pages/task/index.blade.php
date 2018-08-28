@@ -88,12 +88,12 @@
                                                                                             
                                                                                         </td>
                                                                                         <td align="left">
-                                                                                            <div class="title"><a href="{{ route('task.show', $rowTask->slug) }}">{{ $rowTask->title }}</a></div>
+                                                                                            <div class="title"><a href="{{ route('student.task.show', $rowTask->slug) }}">{{ $rowTask->title }}</a></div>
                                                                                             <div class="text-danger"> Deadline : {{ $rowTask->closed_at_display }} </div>
                                                                                             <div class="text"> Aktivitas : hey </div>
                                                                                         </td>
                                                                                         <td>
-                                                                                            <div class="action-icon"><a class="action" href="{{ route('discussion.show', $rowTask->id) }}"><i class="{{ $rowTask->hasEnded == true ? 'feather icon-eye' : 'feather icon-edit' }}"></i></a></div>
+                                                                                            <div class="action-icon"><a class="action" href="{{ route('student.task.show', $rowTask->slug) }}"><i class="{{ $rowTask->hasEnded == true ? 'feather icon-eye' : 'feather icon-edit' }}"></i></a></div>
                                                                                         </td>
                                                                                     </tr>
                                                                                     @endforeach
