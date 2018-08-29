@@ -44,6 +44,18 @@ a:focus, a:hover {
     background: #005b96;
 }
 
+.dataTables_filter {
+    float: left !important;
+ }
+
+ div .dt-buttons {
+    float: right;
+}
+
+.dt-buttons a:hover {
+    color: #FFFFFF
+}
+
 @media only screen and (max-width: 767px) {
     .table.table-xs {
         margin-top: 1.5em;

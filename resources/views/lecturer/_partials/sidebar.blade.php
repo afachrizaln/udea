@@ -44,7 +44,7 @@
         </ul>
         <div class="pcoded-navigation-label">Data</div>	
         <ul class="pcoded-item pcoded-left-item">
-            <li class="pcoded-hasmenu">
+            <li class="pcoded-hasmenu {{ request()->is('lecturer/course*') ? 'active pcoded-trigger ' : '' }}">
                 <a href="javascript:void(0)" class="waves-effect waves-dark">
                     <span class="pcoded-micon"><i class="feather icon-home"></i></span>
                     <span class="pcoded-mtext">Matakuliah</span>
@@ -55,8 +55,8 @@
                             <span class="pcoded-mtext">Tambah MK</span>
                         </a>
                     </li>
-                    <li class="">
-                        <a href="dashboard-ecommerce.html" class="waves-effect waves-dark">
+                    <li class="{{ request()->is('lecturer/course*') ? 'active ' : '' }}">
+                        <a href="{{ route('lecturer.course') }}" class="waves-effect waves-dark">
                             <span class="pcoded-mtext">Daftar MK</span>
                         </a>
                     </li>
