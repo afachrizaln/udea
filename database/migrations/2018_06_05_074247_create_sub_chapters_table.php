@@ -17,7 +17,7 @@ class CreateSubChaptersTable extends Migration
             $table->increments('id');
             $table->integer('chapter_id')->unsigned();
             $table->string('title');
-            $table->text('description');
+            $table->string('file')->nullable();
             $table->timestamps();
 
             $table->foreign('chapter_id')->references('id')->on('chapters')

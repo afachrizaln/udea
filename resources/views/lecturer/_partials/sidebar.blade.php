@@ -17,8 +17,8 @@
                     <span class="pcoded-mtext">Beranda</span>
                 </a>
             </li>
-            <li class="{{ request()->is('lecturer/course*') ? 'active ' : '' }}">
-                <a href="{{ route('lecturer.course') }}" class="waves-effect waves-dark">
+            <li class="{{ request()->is('lecturer/material*') ? 'active ' : '' }}">
+                <a href="{{ route('lecturer.material') }}" class="waves-effect waves-dark">
                     <span class="pcoded-micon"><i class="feather icon-book"></i></span>
                     <span class="pcoded-mtext">Materi</span>
                 </a>

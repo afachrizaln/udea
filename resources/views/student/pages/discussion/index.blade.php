@@ -78,7 +78,7 @@
                                                                         <div class="text"> Aktivitas : {{ $rowDiscussion->comment->count() }} komentar </div>
                                                                     </td>
                                                                     <td>
-                                                                        <div class="action-icon"><a class="action" href="{{ route('student.discussion.show', $rowDiscussion->id) }}"><i class="{{ $rowDiscussion->hasEnded == true ? 'feather icon-eye' : 'feather icon-edit' }}"></i></a></div>
+                                                                        <div class="action-icon"><a class="action" href="{{ route('student.discussion.show', $rowDiscussion->slug) }}"><i class="{{ $rowDiscussion->hasEnded == true ? 'feather icon-eye' : 'feather icon-edit' }}"></i></a></div>
                                                                     </td>
                                                                 </tr>
                                                                 @endforeach

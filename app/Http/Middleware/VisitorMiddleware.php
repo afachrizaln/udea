@@ -18,7 +18,15 @@ class VisitorMiddleware
     {
         if(!Sentinel::check())
             return $next($request);
-        else
-            return redirect()->route('dashboard');
+        else{
+            $user = Sentinel::getUser();
+            if($user->inRole('student')) {
+                return redirect()->route('student.dashboard');
+            } elseif($user->inRole('lecturer')) {
+                return redirect()->route('lecturer.dashboard');
+            } else {
+                return "hello";
+            }
+        }
     }
 }
