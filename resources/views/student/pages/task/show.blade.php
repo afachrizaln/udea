@@ -1,4 +1,4 @@
-@extends('student.layouts.app')
+@extends('layouts.app')
 
 @section('styles')
 <!-- jquery file upload Frame work -->

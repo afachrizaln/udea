@@ -13,4 +13,8 @@ class CourseController extends Controller
         $courses = Course::all();
         return view('lecturer.pages.course.index', compact('courses'));
     }
+
+    public function create(){
+        return view('lecturer.pages.course.create');
+    }
 }

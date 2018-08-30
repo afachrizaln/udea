@@ -1,4 +1,4 @@
-@extends('lecturer.layouts.app')
+@extends('layouts.app')
 
 @section('styles')
 <!-- Calender css -->

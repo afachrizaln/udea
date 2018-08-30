@@ -46,5 +46,6 @@ Route::group(['middleware' => 'user'], function() {
         Route::get('/task', 'Lecturer\TaskController@index')->name('lecturer.task');
         
         Route::get('/course', 'Lecturer\CourseController@index')->name('lecturer.course');
+        Route::get('/course/create', 'Lecturer\CourseController@create')->name('lecturer.create');
     });
 });
