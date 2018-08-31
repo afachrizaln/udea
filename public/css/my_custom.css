@@ -3,6 +3,13 @@ a:focus, a:hover {
     color: #FF7814;
 }
 
+#toast-container {
+    text-align: justify;
+    text-justify: inter-word;
+    font-size: 0.75rem;
+}
+
+
 .color-accordion-block a.ui-state-active, .color-accordion-block a:focus, .color-accordion-block a:hover{
     color: #fff;
     background: #FF7814;

@@ -21,11 +21,11 @@
 	<!-- Favicon icon -->
 	<link rel="icon" href="{{ asset('ablepro/assets/images/favicon.ico') }}" type="image/x-icon">
 	<!-- app css -->
-	<link rel="stylesheet" src=" {{ asset('css/app.css') }} " />
+	<link rel="stylesheet" type="text/css" href=" {{ asset('css/app.css') }} " />
 	<!-- Required Fremwork -->
 	<link rel="stylesheet" type="text/css" href="{{ asset('ablepro/bower_components/bootstrap/css/bootstrap.min.css') }}">
 	<!-- waves.css -->
-	<link rel="stylesheet" href="{{ asset('ablepro/assets/pages/waves/css/waves.min.css') }}" type="text/css" media="all">
+	<link rel="stylesheet" type="text/css" href="{{ asset('ablepro/assets/pages/waves/css/waves.min.css') }}" type="text/css" media="all">
 	<!-- feather icon -->
 	<link rel="stylesheet" type="text/css" href="{{ asset('ablepro/assets/icon/feather/css/feather.css') }}">
 	<!-- ico font -->

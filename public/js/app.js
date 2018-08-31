@@ -13689,7 +13689,7 @@ module.exports = Cancel;
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(11);
-module.exports = __webpack_require__(38);
+module.exports = __webpack_require__(36);
 
 
 /***/ }),
@@ -13707,9 +13707,9 @@ __webpack_require__(12);
 
 window.jqueryslimscroll = __webpack_require__(43);
 
-window.smartwizard = __webpack_require__(36);
+// window.smartwizard = require('smartwizard');
 
-window.pnotify = __webpack_require__(37);
+window.toastr = __webpack_require__(41);
 
 /***/ }),
 /* 12 */
@@ -35945,674 +35945,499 @@ module.exports = function spread(callback) {
 /* 36 */
 /***/ (function(module, exports) {
 
-/*!
- * SmartWizard v4.3.1
- * The awesome jQuery step wizard plugin with Bootstrap support
- * http://www.techlaboratory.net/smartwizard
- *
- * Created by Dipu Raj
- * http://dipuraj.me
- *
- * Licensed under the terms of the MIT License
- * https://github.com/techlab/SmartWizard/blob/master/LICENSE
- */
-
-;(function ($, window, document, undefined) {
-    "use strict";
-    // Default options
-
-    var defaults = {
-        selected: 0, // Initial selected step, 0 = first step
-        keyNavigation: true, // Enable/Disable keyboard navigation(left and right keys are used if enabled)
-        autoAdjustHeight: true, // Automatically adjust content height
-        cycleSteps: false, // Allows to cycle the navigation of steps
-        backButtonSupport: true, // Enable the back button support
-        useURLhash: true, // Enable selection of the step based on url hash
-        showStepURLhash: true, // Show url hash based on step
-        lang: { // Language variables for button
-            next: 'Next',
-            previous: 'Previous'
-        },
-        toolbarSettings: {
-            toolbarPosition: 'bottom', // none, top, bottom, both
-            toolbarButtonPosition: 'end', // start, end
-            showNextButton: true, // show/hide a Next button
-            showPreviousButton: true, // show/hide a Previous button
-            toolbarExtraButtons: [] // Extra buttons to show on toolbar, array of jQuery input/buttons elements
-        },
-        anchorSettings: {
-            anchorClickable: true, // Enable/Disable anchor navigation
-            enableAllAnchors: false, // Activates all anchors clickable all times
-            markDoneStep: true, // Add done css
-            markAllPreviousStepsAsDone: true, // When a step selected by url hash, all previous steps are marked done
-            removeDoneStepOnNavigateBack: false, // While navigate back done step after active step will be cleared
-            enableAnchorOnDoneStep: true // Enable/Disable the done steps navigation
-        },
-        contentURL: null, // content url, Enables Ajax content loading. Can also set as data data-content-url on anchor
-        contentCache: true, // cache step contents, if false content is fetched always from ajax url
-        ajaxSettings: {}, // Ajax extra settings
-        disabledSteps: [], // Array Steps disabled
-        errorSteps: [], // Highlight step with errors
-        hiddenSteps: [], // Hidden steps
-        theme: 'default', // theme for the wizard, related css need to include for other than default theme
-        transitionEffect: 'none', // Effect on navigation, none/slide/fade
-        transitionSpeed: '400'
-    };
-
-    // The plugin constructor
-    function SmartWizard(element, options) {
-        // Merge user settings with default, recursively
-        this.options = $.extend(true, {}, defaults, options);
-        // Main container element
-        this.main = $(element);
-        // Navigation bar element
-        this.nav = this.main.children('ul');
-        // Step anchor elements
-        this.steps = $("li > a", this.nav);
-        // Content container
-        this.container = this.main.children('div');
-        // Content pages
-        this.pages = this.container.children('div');
-        // Active step index
-        this.current_index = null;
-
-        // Backward compatibility
-        this.options.toolbarSettings.toolbarButtonPosition = this.options.toolbarSettings.toolbarButtonPosition === 'right' ? 'end' : this.options.toolbarSettings.toolbarButtonPosition;
-        this.options.toolbarSettings.toolbarButtonPosition = this.options.toolbarSettings.toolbarButtonPosition === 'left' ? 'start' : this.options.toolbarSettings.toolbarButtonPosition;
-
-        // Default fix
-        this.options.theme = this.options.theme === null || this.options.theme === '' ? 'default' : this.options.theme;
-
-        // Call initial method
-        this.init();
-    }
-
-    $.extend(SmartWizard.prototype, {
-
-        init: function () {
-            // Set the elements
-            this._setElements();
-            // Add toolbar
-            this._setToolbar();
-            // Assign plugin events
-            this._setEvents();
-
-            var idx = this.options.selected;
-            // Get selected step from the url
-            if (this.options.useURLhash) {
-                // Get step number from url hash if available
-                var hash = window.location.hash;
-                if (hash && hash.length > 0) {
-                    var elm = $("a[href*='" + hash + "']", this.nav);
-                    if (elm.length > 0) {
-                        var id = this.steps.index(elm);
-                        idx = id >= 0 ? id : idx;
-                    }
-                }
-            }
-
-            if (idx > 0 && this.options.anchorSettings.markDoneStep && this.options.anchorSettings.markAllPreviousStepsAsDone) {
-                // Mark previous steps of the active step as done
-                this.steps.eq(idx).parent('li').prevAll().addClass("done");
-            }
-
-            // Show the initial step
-            this._showStep(idx);
-        },
-
-        // PRIVATE FUNCTIONS
-
-        _setElements: function () {
-            // Set the main element
-            this.main.addClass('sw-main sw-theme-' + this.options.theme);
-            // Set anchor elements
-            this.nav.addClass('nav nav-tabs step-anchor').children('li').addClass('nav-item').children('a').addClass('nav-link'); // nav-justified  nav-pills
-
-            // Make the anchor clickable
-            if (this.options.anchorSettings.enableAllAnchors !== false && this.options.anchorSettings.anchorClickable !== false) {
-                this.steps.parent('li').addClass('clickable');
-            }
-            // Set content container
-            this.container.addClass('sw-container tab-content');
-            // Set content pages
-            this.pages.addClass('tab-pane step-content');
-
-            // Disabled steps
-            var mi = this;
-            if (this.options.disabledSteps && this.options.disabledSteps.length > 0) {
-                $.each(this.options.disabledSteps, function (i, n) {
-                    mi.steps.eq(n).parent('li').addClass('disabled');
-                });
-            }
-            // Error steps
-            if (this.options.errorSteps && this.options.errorSteps.length > 0) {
-                $.each(this.options.errorSteps, function (i, n) {
-                    mi.steps.eq(n).parent('li').addClass('danger');
-                });
-            }
-            // Hidden steps
-            if (this.options.hiddenSteps && this.options.hiddenSteps.length > 0) {
-                $.each(this.options.hiddenSteps, function (i, n) {
-                    mi.steps.eq(n).parent('li').addClass('hidden');
-                });
-            }
-
-            return true;
-        },
-        _setToolbar: function () {
-            // Skip right away if the toolbar is not enabled
-            if (this.options.toolbarSettings.toolbarPosition === 'none') {
-                return true;
-            }
-
-            // Create the toolbar buttons
-            var btnNext = this.options.toolbarSettings.showNextButton !== false ? $('<button></button>').text(this.options.lang.next).addClass('btn btn-secondary sw-btn-next').attr('type', 'button') : null;
-            var btnPrevious = this.options.toolbarSettings.showPreviousButton !== false ? $('<button></button>').text(this.options.lang.previous).addClass('btn btn-secondary sw-btn-prev').attr('type', 'button') : null;
-            var btnGroup = $('<div></div>').addClass('btn-group mr-2 sw-btn-group').attr('role', 'group').append(btnPrevious, btnNext);
-
-            // Add extra toolbar buttons
-            var btnGroupExtra = null;
-
-            if (this.options.toolbarSettings.toolbarExtraButtons && this.options.toolbarSettings.toolbarExtraButtons.length > 0) {
-                btnGroupExtra = $('<div></div>').addClass('btn-group mr-2 sw-btn-group-extra').attr('role', 'group');
-                $.each(this.options.toolbarSettings.toolbarExtraButtons, function (i, n) {
-                    btnGroupExtra.append(n.clone(true));
-                });
-            }
-
-            var toolbarTop, toolbarBottom;
-            // Append toolbar based on the position
-            switch (this.options.toolbarSettings.toolbarPosition) {
-                case 'top':
-                    toolbarTop = $('<div></div>').addClass('btn-toolbar sw-toolbar sw-toolbar-top justify-content-' + this.options.toolbarSettings.toolbarButtonPosition);
-                    toolbarTop.append(btnGroup);
-                    if (this.options.toolbarSettings.toolbarButtonPosition === 'start') {
-                        toolbarTop.prepend(btnGroupExtra);
-                    } else {
-                        toolbarTop.append(btnGroupExtra);
-                    }
-                    this.container.before(toolbarTop);
-                    break;
-                case 'bottom':
-                    toolbarBottom = $('<div></div>').addClass('btn-toolbar sw-toolbar sw-toolbar-bottom justify-content-' + this.options.toolbarSettings.toolbarButtonPosition);
-                    toolbarBottom.append(btnGroup);
-                    if (this.options.toolbarSettings.toolbarButtonPosition === 'start') {
-                        toolbarBottom.prepend(btnGroupExtra);
-                    } else {
-                        toolbarBottom.append(btnGroupExtra);
-                    }
-                    this.container.after(toolbarBottom);
-                    break;
-                case 'both':
-                    toolbarTop = $('<div></div>').addClass('btn-toolbar sw-toolbar sw-toolbar-top justify-content-' + this.options.toolbarSettings.toolbarButtonPosition);
-                    toolbarTop.append(btnGroup);
-                    if (this.options.toolbarSettings.toolbarButtonPosition === 'start') {
-                        toolbarTop.prepend(btnGroupExtra);
-                    } else {
-                        toolbarTop.append(btnGroupExtra);
-                    }
-                    this.container.before(toolbarTop);
-
-                    toolbarBottom = $('<div></div>').addClass('btn-toolbar sw-toolbar sw-toolbar-bottom justify-content-' + this.options.toolbarSettings.toolbarButtonPosition);
-                    toolbarBottom.append(btnGroup.clone(true));
-
-                    if (btnGroupExtra !== null) {
-                        if (this.options.toolbarSettings.toolbarButtonPosition === 'start') {
-                            toolbarBottom.prepend(btnGroupExtra.clone(true));
-                        } else {
-                            toolbarBottom.append(btnGroupExtra.clone(true));
-                        }
-                    }
-                    this.container.after(toolbarBottom);
-                    break;
-                default:
-                    toolbarBottom = $('<div></div>').addClass('btn-toolbar sw-toolbar sw-toolbar-bottom justify-content-' + this.options.toolbarSettings.toolbarButtonPosition);
-                    toolbarBottom.append(btnGroup);
-                    if (this.options.toolbarSettings.toolbarButtonPosition === 'start') {
-                        toolbarBottom.append(btnGroupExtra);
-                    } else {
-                        toolbarBottom.append(btnGroupExtra);
-                    }
-                    this.container.after(toolbarBottom);
-                    break;
-            }
-            return true;
-        },
-        _setEvents: function () {
-            // Anchor click event
-            var mi = this;
-            $(this.steps).on("click", function (e) {
-                e.preventDefault();
-                if (mi.options.anchorSettings.anchorClickable === false) {
-                    return true;
-                }
-                var idx = mi.steps.index(this);
-                if (mi.options.anchorSettings.enableAnchorOnDoneStep === false && mi.steps.eq(idx).parent('li').hasClass('done')) {
-                    return true;
-                }
-
-                if (idx !== mi.current_index) {
-                    if (mi.options.anchorSettings.enableAllAnchors !== false && mi.options.anchorSettings.anchorClickable !== false) {
-                        mi._showStep(idx);
-                    } else {
-                        if (mi.steps.eq(idx).parent('li').hasClass('done')) {
-                            mi._showStep(idx);
-                        }
-                    }
-                }
-            });
-
-            // Next button event
-            $('.sw-btn-next', this.main).on("click", function (e) {
-                e.preventDefault();
-                mi._showNext();
-            });
-
-            // Previous button event
-            $('.sw-btn-prev', this.main).on("click", function (e) {
-                e.preventDefault();
-                mi._showPrevious();
-            });
-
-            // Keyboard navigation event
-            if (this.options.keyNavigation) {
-                $(document).keyup(function (e) {
-                    mi._keyNav(e);
-                });
-            }
-
-            // Back/forward browser button event
-            if (this.options.backButtonSupport) {
-                $(window).on('hashchange', function (e) {
-                    if (!mi.options.useURLhash) {
-                        return true;
-                    }
-                    if (window.location.hash) {
-                        var elm = $("a[href*='" + window.location.hash + "']", mi.nav);
-                        if (elm && elm.length > 0) {
-                            e.preventDefault();
-                            mi._showStep(mi.steps.index(elm));
-                        }
-                    }
-                });
-            }
-
-            return true;
-        },
-        _showNext: function () {
-            var si = this.current_index + 1;
-            // Find the next not disabled step
-            for (var i = si; i < this.steps.length; i++) {
-                if (!this.steps.eq(i).parent('li').hasClass('disabled') && !this.steps.eq(i).parent('li').hasClass('hidden')) {
-                    si = i;
-                    break;
-                }
-            }
-
-            if (this.steps.length <= si) {
-                if (!this.options.cycleSteps) {
-                    return false;
-                }
-                si = 0;
-            }
-            this._showStep(si);
-            return true;
-        },
-        _showPrevious: function () {
-            var si = this.current_index - 1;
-            // Find the previous not disabled step
-            for (var i = si; i >= 0; i--) {
-                if (!this.steps.eq(i).parent('li').hasClass('disabled') && !this.steps.eq(i).parent('li').hasClass('hidden')) {
-                    si = i;
-                    break;
-                }
-            }
-            if (0 > si) {
-                if (!this.options.cycleSteps) {
-                    return false;
-                }
-                si = this.steps.length - 1;
-            }
-            this._showStep(si);
-            return true;
-        },
-        _showStep: function (idx) {
-            // If step not found, skip
-            if (!this.steps.eq(idx)) {
-                return false;
-            }
-            // If current step is requested again, skip
-            if (idx == this.current_index) {
-                return false;
-            }
-            // If it is a disabled step, skip
-            if (this.steps.eq(idx).parent('li').hasClass('disabled') || this.steps.eq(idx).parent('li').hasClass('hidden')) {
-                return false;
-            }
-            // Load step content
-            this._loadStepContent(idx);
-            return true;
-        },
-        _loadStepContent: function (idx) {
-            var mi = this;
-            // Get current step elements
-            var curTab = this.steps.eq(this.current_index);
-            // Get the direction of step navigation
-            var stepDirection = '';
-            var elm = this.steps.eq(idx);
-            var contentURL = elm.data('content-url') && elm.data('content-url').length > 0 ? elm.data('content-url') : this.options.contentURL;
-
-            if (this.current_index !== null && this.current_index !== idx) {
-                stepDirection = this.current_index < idx ? "forward" : "backward";
-            }
-
-            // Trigger "leaveStep" event
-            if (this.current_index !== null && this._triggerEvent("leaveStep", [curTab, this.current_index, stepDirection]) === false) {
-                return false;
-            }
-
-            if (contentURL && contentURL.length > 0 && (!elm.data('has-content') || !this.options.contentCache)) {
-                // Get ajax content and then show step
-                var selPage = elm.length > 0 ? $(elm.attr("href"), this.main) : null;
-
-                var ajaxSettings = $.extend(true, {}, {
-                    url: contentURL,
-                    type: "POST",
-                    data: { step_number: idx },
-                    dataType: "text",
-                    beforeSend: function () {
-                        mi._loader('show');
-                    },
-                    error: function (jqXHR, status, message) {
-                        mi._loader('hide');
-                        $.error(message);
-                    },
-                    success: function (res) {
-                        if (res && res.length > 0) {
-                            elm.data('has-content', true);
-                            selPage.html(res);
-                        }
-                        mi._loader('hide');
-                        mi._transitPage(idx);
-                    }
-                }, this.options.ajaxSettings);
-
-                $.ajax(ajaxSettings);
-            } else {
-                // Show step
-                this._transitPage(idx);
-            }
-            return true;
-        },
-        _transitPage: function (idx) {
-            var mi = this;
-            // Get current step elements
-            var curTab = this.steps.eq(this.current_index);
-            var curPage = curTab.length > 0 ? $(curTab.attr("href"), this.main) : null;
-            // Get step to show elements
-            var selTab = this.steps.eq(idx);
-            var selPage = selTab.length > 0 ? $(selTab.attr("href"), this.main) : null;
-            // Get the direction of step navigation
-            var stepDirection = '';
-            if (this.current_index !== null && this.current_index !== idx) {
-                stepDirection = this.current_index < idx ? "forward" : "backward";
-            }
-
-            var stepPosition = 'middle';
-            if (idx === 0) {
-                stepPosition = 'first';
-            } else if (idx === this.steps.length - 1) {
-                stepPosition = 'final';
-            }
-
-            this.options.transitionEffect = this.options.transitionEffect.toLowerCase();
-            this.pages.finish();
-            if (this.options.transitionEffect === 'slide') {
-                // normal slide
-                if (curPage && curPage.length > 0) {
-                    curPage.slideUp('fast', this.options.transitionEasing, function () {
-                        selPage.slideDown(mi.options.transitionSpeed, mi.options.transitionEasing);
-                    });
-                } else {
-                    selPage.slideDown(this.options.transitionSpeed, this.options.transitionEasing);
-                }
-            } else if (this.options.transitionEffect === 'fade') {
-                // normal fade
-                if (curPage && curPage.length > 0) {
-                    curPage.fadeOut('fast', this.options.transitionEasing, function () {
-                        selPage.fadeIn('fast', mi.options.transitionEasing, function () {
-                            $(this).show();
-                        });
-                    });
-                } else {
-                    selPage.fadeIn(this.options.transitionSpeed, this.options.transitionEasing, function () {
-                        $(this).show();
-                    });
-                }
-            } else {
-                if (curPage && curPage.length > 0) {
-                    curPage.hide();
-                }
-                selPage.show();
-            }
-            // Change the url hash to new step
-            this._setURLHash(selTab.attr("href"));
-            // Update controls
-            this._setAnchor(idx);
-            // Set the buttons based on the step
-            this._setButtons(idx);
-            // Fix height with content
-            this._fixHeight(idx);
-            // Update the current index
-            this.current_index = idx;
-
-            // Trigger "showStep" event
-            this._triggerEvent("showStep", [selTab, this.current_index, stepDirection, stepPosition]);
-            return true;
-        },
-        _setAnchor: function (idx) {
-            // Current step anchor > Remove other classes and add done class
-            this.steps.eq(this.current_index).parent('li').removeClass("active");
-            if (this.options.anchorSettings.markDoneStep !== false && this.current_index !== null) {
-                this.steps.eq(this.current_index).parent('li').addClass("done");
-                if (this.options.anchorSettings.removeDoneStepOnNavigateBack !== false) {
-                    this.steps.eq(idx).parent('li').nextAll().removeClass("done");
-                }
-            }
-
-            // Next step anchor > Remove other classes and add active class
-            this.steps.eq(idx).parent('li').removeClass("done").addClass("active");
-            return true;
-        },
-        _setButtons: function (idx) {
-            // Previous/Next Button enable/disable based on step
-            if (!this.options.cycleSteps) {
-                if (0 >= idx) {
-                    $('.sw-btn-prev', this.main).addClass("disabled");
-                } else {
-                    $('.sw-btn-prev', this.main).removeClass("disabled");
-                }
-                if (this.steps.length - 1 <= idx) {
-                    $('.sw-btn-next', this.main).addClass("disabled");
-                } else {
-                    $('.sw-btn-next', this.main).removeClass("disabled");
-                }
-            }
-            return true;
-        },
-
-        // HELPER FUNCTIONS
-
-        _keyNav: function (e) {
-            var mi = this;
-            // Keyboard navigation
-            switch (e.which) {
-                case 37:
-                    // left
-                    mi._showPrevious();
-                    e.preventDefault();
-                    break;
-                case 39:
-                    // right
-                    mi._showNext();
-                    e.preventDefault();
-                    break;
-                default:
-                    return; // exit this handler for other keys
-            }
-        },
-        _fixHeight: function (idx) {
-            // Auto adjust height of the container
-            if (this.options.autoAdjustHeight) {
-                var selPage = this.steps.eq(idx).length > 0 ? $(this.steps.eq(idx).attr("href"), this.main) : null;
-                this.container.finish().animate({ minHeight: selPage.outerHeight() }, this.options.transitionSpeed, function () {});
-            }
-            return true;
-        },
-        _triggerEvent: function (name, params) {
-            // Trigger an event
-            var e = $.Event(name);
-            this.main.trigger(e, params);
-            if (e.isDefaultPrevented()) {
-                return false;
-            }
-            return e.result;
-        },
-        _setURLHash: function (hash) {
-            if (this.options.showStepURLhash && window.location.hash !== hash) {
-                window.location.hash = hash;
-            }
-        },
-        _loader: function (action) {
-            switch (action) {
-                case 'show':
-                    this.main.addClass('sw-loading');
-                    break;
-                case 'hide':
-                    this.main.removeClass('sw-loading');
-                    break;
-                default:
-                    this.main.toggleClass('sw-loading');
-            }
-        },
-
-        // PUBLIC FUNCTIONS
-
-        theme: function (v) {
-            if (this.options.theme === v) {
-                return false;
-            }
-            this.main.removeClass('sw-theme-' + this.options.theme);
-            this.options.theme = v;
-            this.main.addClass('sw-theme-' + this.options.theme);
-            // Trigger "themeChanged" event
-            this._triggerEvent("themeChanged", [this.options.theme]);
-        },
-        next: function () {
-            this._showNext();
-        },
-        prev: function () {
-            this._showPrevious();
-        },
-        reset: function () {
-            // Trigger "beginReset" event
-            if (this._triggerEvent("beginReset") === false) {
-                return false;
-            }
-
-            // Reset all elements and classes
-            this.container.stop(true);
-            this.pages.stop(true);
-            this.pages.hide();
-            this.current_index = null;
-            this._setURLHash(this.steps.eq(this.options.selected).attr("href"));
-            $(".sw-toolbar", this.main).remove();
-            this.steps.removeClass();
-            this.steps.parents('li').removeClass();
-            this.steps.data('has-content', false);
-            this.init();
-
-            // Trigger "endReset" event
-            this._triggerEvent("endReset");
-        },
-        stepState: function (stepArray, state) {
-            var mi = this;
-            stepArray = $.isArray(stepArray) ? stepArray : [stepArray];
-            var selSteps = $.grep(this.steps, function (n, i) {
-                return $.inArray(i, stepArray) !== -1; //  && i !== mi.current_index
-            });
-            if (selSteps && selSteps.length > 0) {
-                switch (state) {
-                    case 'disable':
-                        $(selSteps).parents('li').addClass('disabled');
-                        break;
-                    case 'enable':
-                        $(selSteps).parents('li').removeClass('disabled');
-                        break;
-                    case 'hide':
-                        $(selSteps).parents('li').addClass('hidden');
-                        break;
-                    case 'show':
-                        $(selSteps).parents('li').removeClass('hidden');
-                        break;
-                    case 'error-on':
-                        $(selSteps).parents('li').addClass('danger');
-                        break;
-                    case 'error-off':
-                        $(selSteps).parents('li').removeClass('danger');
-                        break;
-                }
-            }
-        }
-    });
-
-    // Wrapper for the plugin
-    $.fn.smartWizard = function (options) {
-        var args = arguments;
-        var instance;
-
-        if (options === undefined || typeof options === 'object') {
-            return this.each(function () {
-                if (!$.data(this, "smartWizard")) {
-                    $.data(this, "smartWizard", new SmartWizard(this, options));
-                }
-            });
-        } else if (typeof options === 'string' && options[0] !== '_' && options !== 'init') {
-            instance = $.data(this[0], 'smartWizard');
-
-            if (options === 'destroy') {
-                $.data(this, 'smartWizard', null);
-            }
-
-            if (instance instanceof SmartWizard && typeof instance[options] === 'function') {
-                return instance[options].apply(instance, Array.prototype.slice.call(args, 1));
-            } else {
-                return this;
-            }
-        }
-    };
-})(jQuery, window, document);
-
-/***/ }),
-/* 37 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-let PNotify,posTimer,onDocumentLoaded=()=>{PNotify.defaultStack.context=document.body,window.addEventListener("resize",()=>{posTimer&&clearTimeout(posTimer),posTimer=setTimeout(()=>{PNotify.positionAll()},10)})},createStackOverlay=e=>{const t=document.createElement("div");t.classList.add("ui-pnotify-modal-overlay"),e.context!==document.body&&(t.style.height=e.context.scrollHeight+"px",t.style.width=e.context.scrollWidth+"px"),t.addEventListener("click",()=>{e.overlayClose&&PNotify.closeStack(e)}),e.overlay=t},insertStackOverlay=e=>{e.overlay.parentNode!==e.context&&(e.overlay=e.context.insertBefore(e.overlay,e.context.firstChild))},removeStackOverlay=e=>{e.overlay.parentNode&&e.overlay.parentNode.removeChild(e.overlay)};const getDefaultArgs=(e,t)=>("object"!=typeof e&&(e={text:e}),t&&(e.type=t),{target:document.body,data:e});function _styles({styling:e}){return"object"==typeof e?e:PNotify.styling[e]}function _icons({icons:e}){return"object"==typeof e?e:PNotify.icons[e]}function _widthStyle({width:e}){return"string"==typeof e?"width: "+e+";":""}function _minHeightStyle({minHeight:e}){return"string"==typeof e?"min-height: "+e+";":""}function data(){const e=Object.assign({_state:"initializing",_timer:null,_animTimer:null,_animating:!1,_animatingClass:"",_moveClass:"",_timerHide:!1,_moduleClasses:[],_moduleIsNoticeOpen:!1,_modules:{},_modulesPrependContainer:PNotify.modulesPrependContainer,_modulesAppendContainer:PNotify.modulesAppendContainer},PNotify.defaults);return e.modules=Object.assign({},PNotify.defaults.modules),e}var methods={runModules(e){if("init"===e){for(let e in PNotify.modules)if(PNotify.modules.hasOwnProperty(e)&&"function"==typeof PNotify.modules[e].init){const t=PNotify.modules[e].init(this);this.initModule(t)}}else{const{_modules:t}=this.get();for(let i in t){if(!t.hasOwnProperty(i))continue;const o=Object.assign({_notice:this,_options:this.get()},this.get().modules[i]);t[i].set(o),"function"==typeof t[i][e]&&t[i][e]()}}},initModule(e){const{modules:t}=this.get();t.hasOwnProperty(e.constructor.key)||(t[e.constructor.key]={});const i=Object.assign({_notice:this,_options:this.get()},t[e.constructor.key]);e.initModule(i);const{_modules:o}=this.get();o[e.constructor.key]=e},update(e){const t=this.get().hide,i=this.get().icon;this.set(e),this.runModules("update"),this.get().hide?t||this.queueClose():this.cancelClose(),this.queuePosition();const{icon:o}=this.get();return o!==i&&(!0===o&&"fontawesome5"===this.get().icons||"string"==typeof o&&o.match(/(^| )fa[srlb]($| )/))&&(this.set({icon:!1}),this.set({icon:o})),this},open(){const{_state:e,hide:t}=this.get();if("opening"===e)return;if("open"===e)return void(t&&this.queueClose());this.set({_state:"opening",_animatingClass:"ui-pnotify-initial-hidden"}),this.runModules("beforeOpen");let{stack:i}=this.get();if(!this.refs.elem.parentNode||i&&i.context&&i.context!==this.refs.elem.parentNode)if(i&&i.context)i.context.appendChild(this.refs.elem);else{if(!document.body)throw new Error("No context to open this notice in.");document.body.appendChild(this.refs.elem)}return setTimeout(()=>{i&&(i.animation=!1,PNotify.positionAll(),i.animation=!0),this.animateIn(()=>{this.get().hide&&this.queueClose(),this.set({_state:"open"}),this.runModules("afterOpen")})},0),this},remove(e){return this.close(e)},close(e){const{_state:t}=this.get();if("closing"===t||"closed"===t)return;this.set({_state:"closing",_timerHide:!!e}),this.runModules("beforeClose");const{_timer:i}=this.get();return i&&clearTimeout&&(clearTimeout(i),this.set({_timer:null})),this.animateOut(()=>{if(this.set({_state:"closed"}),this.runModules("afterClose"),this.queuePosition(),this.get().remove&&this.refs.elem.parentNode.removeChild(this.refs.elem),this.runModules("beforeDestroy"),this.get().destroy&&null!==PNotify.notices){const e=PNotify.notices.indexOf(this);-1!==e&&PNotify.notices.splice(e,1)}this.runModules("afterDestroy")}),this},animateIn(e){this.set({_animating:"in"});const t=()=>{this.refs.elem.removeEventListener("transitionend",t);const{_animTimer:i,_animating:o,_moduleIsNoticeOpen:n}=this.get();if(i&&clearTimeout(i),"in"!==o)return;let s=n;if(!s){const e=this.refs.elem.getBoundingClientRect();for(let t in e)if(e[t]>0){s=!0;break}}s?(e&&e.call(),this.set({_animating:!1})):this.set({_animTimer:setTimeout(t,40)})};"fade"===this.get().animation?(this.refs.elem.addEventListener("transitionend",t),this.set({_animatingClass:"ui-pnotify-in"}),this.refs.elem.style.opacity,this.set({_animatingClass:"ui-pnotify-in ui-pnotify-fade-in"}),this.set({_animTimer:setTimeout(t,650)})):(this.set({_animatingClass:"ui-pnotify-in"}),t())},animateOut(e){this.set({_animating:"out"});const t=()=>{this.refs.elem.removeEventListener("transitionend",t);const{_animTimer:i,_animating:o,_moduleIsNoticeOpen:n}=this.get();if(i&&clearTimeout(i),"out"!==o)return;let s=n;if(!s){const e=this.refs.elem.getBoundingClientRect();for(let t in e)if(e[t]>0){s=!0;break}}if(this.refs.elem.style.opacity&&"0"!==this.refs.elem.style.opacity&&s)this.set({_animTimer:setTimeout(t,40)});else{this.set({_animatingClass:""});const{stack:t}=this.get();if(t&&t.overlay){let e=!1;for(let i=0;i<PNotify.notices.length;i++){const o=PNotify.notices[i];if(o!==this&&o.get().stack===t&&"closed"!==o.get()._state){e=!0;break}}e||removeStackOverlay(t)}e&&e.call(),this.set({_animating:!1})}};"fade"===this.get().animation?(this.refs.elem.addEventListener("transitionend",t),this.set({_animatingClass:"ui-pnotify-in"}),this.set({_animTimer:setTimeout(t,650)})):(this.set({_animatingClass:""}),t())},position(){let{stack:e}=this.get(),t=this.refs.elem;if(!e)return;if(e.context||(e.context=document.body),"number"!=typeof e.nextpos1&&(e.nextpos1=e.firstpos1),"number"!=typeof e.nextpos2&&(e.nextpos2=e.firstpos2),"number"!=typeof e.addpos2&&(e.addpos2=0),!t.classList.contains("ui-pnotify-in")&&!t.classList.contains("ui-pnotify-initial-hidden"))return this;e.modal&&(e.overlay||createStackOverlay(e),insertStackOverlay(e)),t.getBoundingClientRect(),e.animation&&this.set({_moveClass:"ui-pnotify-move"});let i,o=e.context===document.body?window.innerHeight:e.context.scrollHeight,n=e.context===document.body?window.innerWidth:e.context.scrollWidth;if(e.dir1){let s;switch(i={down:"top",up:"bottom",left:"right",right:"left"}[e.dir1],e.dir1){case"down":s=t.offsetTop;break;case"up":s=o-t.scrollHeight-t.offsetTop;break;case"left":s=n-t.scrollWidth-t.offsetLeft;break;case"right":s=t.offsetLeft}void 0===e.firstpos1&&(e.firstpos1=s,e.nextpos1=e.firstpos1)}if(e.dir1&&e.dir2){let i,s={down:"top",up:"bottom",left:"right",right:"left"}[e.dir2];switch(e.dir2){case"down":i=t.offsetTop;break;case"up":i=o-t.scrollHeight-t.offsetTop;break;case"left":i=n-t.scrollWidth-t.offsetLeft;break;case"right":i=t.offsetLeft}void 0===e.firstpos2&&(e.firstpos2=i,e.nextpos2=e.firstpos2);const r=e.nextpos1+t.offsetHeight+(void 0===e.spacing1?25:e.spacing1),a=e.nextpos1+t.offsetWidth+(void 0===e.spacing1?25:e.spacing1);switch((("down"===e.dir1||"up"===e.dir1)&&r>o||("left"===e.dir1||"right"===e.dir1)&&a>n)&&(e.nextpos1=e.firstpos1,e.nextpos2+=e.addpos2+(void 0===e.spacing2?25:e.spacing2),e.addpos2=0),"number"==typeof e.nextpos2&&(t.style[s]=e.nextpos2+"px",e.animation||t.style[s]),e.dir2){case"down":case"up":t.offsetHeight+(parseFloat(t.style.marginTop,10)||0)+(parseFloat(t.style.marginBottom,10)||0)>e.addpos2&&(e.addpos2=t.offsetHeight);break;case"left":case"right":t.offsetWidth+(parseFloat(t.style.marginLeft,10)||0)+(parseFloat(t.style.marginRight,10)||0)>e.addpos2&&(e.addpos2=t.offsetWidth)}}else if(e.dir1){let i,n;switch(e.dir1){case"down":case"up":n=["left","right"],i=e.context.scrollWidth/2-t.offsetWidth/2;break;case"left":case"right":n=["top","bottom"],i=o/2-t.offsetHeight/2}t.style[n[0]]=i+"px",t.style[n[1]]="auto",e.animation||t.style[n[0]]}if(e.dir1)switch("number"==typeof e.nextpos1&&(t.style[i]=e.nextpos1+"px",e.animation||t.style[i]),e.dir1){case"down":case"up":e.nextpos1+=t.offsetHeight+(void 0===e.spacing1?25:e.spacing1);break;case"left":case"right":e.nextpos1+=t.offsetWidth+(void 0===e.spacing1?25:e.spacing1)}else{let i=n/2-t.offsetWidth/2,s=o/2-t.offsetHeight/2;t.style.left=i+"px",t.style.top=s+"px",e.animation||t.style.left}return this},queuePosition(e){return posTimer&&clearTimeout(posTimer),e||(e=10),posTimer=setTimeout(()=>{PNotify.positionAll()},e),this},cancelRemove(){return this.cancelClose()},cancelClose(){const{_timer:e,_animTimer:t,_state:i,animation:o}=this.get();return e&&clearTimeout(e),t&&clearTimeout(t),"closing"===i&&this.set({_state:"open",_animating:!1,_animatingClass:"fade"===o?"ui-pnotify-in ui-pnotify-fade-in":"ui-pnotify-in"}),this},queueRemove(){return this.queueClose()},queueClose(){return this.cancelClose(),this.set({_timer:setTimeout(()=>this.close(!0),isNaN(this.get().delay)?0:this.get().delay)}),this},addModuleClass(...e){const{_moduleClasses:t}=this.get();for(let i=0;i<e.length;i++){let o=e[i];-1===t.indexOf(o)&&t.push(o)}this.set({_moduleClasses:t})},removeModuleClass(...e){const{_moduleClasses:t}=this.get();for(let i=0;i<e.length;i++){let o=e[i];const n=t.indexOf(o);-1!==n&&t.splice(n,1)}this.set({_moduleClasses:t})},hasModuleClass(...e){const{_moduleClasses:t}=this.get();for(let i=0;i<e.length;i++){let o=e[i];if(-1===t.indexOf(o))return!1}return!0}};function oncreate(){this.on("mouseenter",e=>{if(this.get().mouseReset&&"out"===this.get()._animating){if(!this.get()._timerHide)return;this.cancelClose()}this.get().hide&&this.get().mouseReset&&this.cancelClose()}),this.on("mouseleave",e=>{this.get().hide&&this.get().mouseReset&&"out"!==this.get()._animating&&this.queueClose(),PNotify.positionAll()});let{stack:e}=this.get();e&&"top"===e.push?PNotify.notices.splice(0,0,this):PNotify.notices.push(this),this.runModules("init"),this.set({_state:"closed"}),this.get().autoDisplay&&this.open()}function setup(e){(PNotify=e).VERSION="4.0.0-alpha.3",PNotify.defaultStack={dir1:"down",dir2:"left",firstpos1:25,firstpos2:25,spacing1:36,spacing2:36,push:"bottom",context:window&&document.body},PNotify.defaults={title:!1,titleTrusted:!1,text:!1,textTrusted:!1,styling:"brighttheme",icons:"brighttheme",addClass:"",cornerClass:"",autoDisplay:!0,width:"360px",minHeight:"16px",type:"notice",icon:!0,animation:"fade",animateSpeed:"normal",shadow:!0,hide:!0,delay:8e3,mouseReset:!0,remove:!0,destroy:!0,stack:PNotify.defaultStack,modules:{}},PNotify.notices=[],PNotify.modules={},PNotify.modulesPrependContainer=[],PNotify.modulesAppendContainer=[],PNotify.alert=(e=>new PNotify(getDefaultArgs(e))),PNotify.notice=(e=>new PNotify(getDefaultArgs(e,"notice"))),PNotify.info=(e=>new PNotify(getDefaultArgs(e,"info"))),PNotify.success=(e=>new PNotify(getDefaultArgs(e,"success"))),PNotify.error=(e=>new PNotify(getDefaultArgs(e,"error"))),PNotify.removeAll=(()=>{PNotify.closeAll()}),PNotify.closeAll=(()=>{for(let e=0;e<PNotify.notices.length;e++)PNotify.notices[e].close&&PNotify.notices[e].close(!1)}),PNotify.removeStack=(e=>{PNotify.closeStack(e)}),PNotify.closeStack=(e=>{if(!1!==e)for(let t=0;t<PNotify.notices.length;t++)PNotify.notices[t].close&&PNotify.notices[t].get().stack===e&&PNotify.notices[t].close(!1)}),PNotify.positionAll=(()=>{if(posTimer&&clearTimeout(posTimer),posTimer=null,PNotify.notices.length>0){for(let e=0;e<PNotify.notices.length;e++){let t=PNotify.notices[e],{stack:i}=t.get();i&&(i.overlay&&removeStackOverlay(i),i.nextpos1=i.firstpos1,i.nextpos2=i.firstpos2,i.addpos2=0)}for(let e=0;e<PNotify.notices.length;e++)PNotify.notices[e].position()}else delete PNotify.defaultStack.nextpos1,delete PNotify.defaultStack.nextpos2}),PNotify.styling={brighttheme:{container:"brighttheme",notice:"brighttheme-notice",info:"brighttheme-info",success:"brighttheme-success",error:"brighttheme-error"},bootstrap3:{container:"alert",notice:"alert-warning",info:"alert-info",success:"alert-success",error:"alert-danger",icon:"ui-pnotify-icon-bs3"},bootstrap4:{container:"alert",notice:"alert-warning",info:"alert-info",success:"alert-success",error:"alert-danger",icon:"ui-pnotify-icon-bs4",title:"ui-pnotify-title-bs4"}},PNotify.icons={brighttheme:{notice:"brighttheme-icon-notice",info:"brighttheme-icon-info",success:"brighttheme-icon-success",error:"brighttheme-icon-error"},bootstrap3:{notice:"glyphicon glyphicon-exclamation-sign",info:"glyphicon glyphicon-info-sign",success:"glyphicon glyphicon-ok-sign",error:"glyphicon glyphicon-warning-sign"},fontawesome4:{notice:"fa fa-exclamation-circle",info:"fa fa-info-circle",success:"fa fa-check-circle",error:"fa fa-exclamation-triangle"},fontawesome5:{notice:"fas fa-exclamation-circle",info:"fas fa-info-circle",success:"fas fa-check-circle",error:"fas fa-exclamation-triangle"}},window&&document.body?onDocumentLoaded():document.addEventListener("DOMContentLoaded",onDocumentLoaded)}function add_css(){var e=createElement("style");e.id="svelte-1eldsjg-style",e.textContent='body > .ui-pnotify{position:fixed;z-index:100040}body > .ui-pnotify.ui-pnotify-modal{z-index:100042}.ui-pnotify{position:absolute;height:auto;z-index:1;display:none}.ui-pnotify.ui-pnotify-modal{z-index:3}.ui-pnotify.ui-pnotify-in{display:block}.ui-pnotify.ui-pnotify-initial-hidden{display:block;visibility:hidden}.ui-pnotify.ui-pnotify-move{transition:left .5s ease, top .5s ease, right .5s ease, bottom .5s ease}.ui-pnotify.ui-pnotify-fade-slow{transition:opacity .4s linear;opacity:0}.ui-pnotify.ui-pnotify-fade-slow.ui-pnotify.ui-pnotify-move{transition:opacity .4s linear, left .5s ease, top .5s ease, right .5s ease, bottom .5s ease}.ui-pnotify.ui-pnotify-fade-normal{transition:opacity .25s linear;opacity:0}.ui-pnotify.ui-pnotify-fade-normal.ui-pnotify.ui-pnotify-move{transition:opacity .25s linear, left .5s ease, top .5s ease, right .5s ease, bottom .5s ease}.ui-pnotify.ui-pnotify-fade-fast{transition:opacity .1s linear;opacity:0}.ui-pnotify.ui-pnotify-fade-fast.ui-pnotify.ui-pnotify-move{transition:opacity .1s linear, left .5s ease, top .5s ease, right .5s ease, bottom .5s ease}.ui-pnotify.ui-pnotify-fade-in{opacity:1}.ui-pnotify .ui-pnotify-shadow{-webkit-box-shadow:0px 6px 28px 0px rgba(0,0,0,0.1);-moz-box-shadow:0px 6px 28px 0px rgba(0,0,0,0.1);box-shadow:0px 6px 28px 0px rgba(0,0,0,0.1)}.ui-pnotify-container{background-position:0 0;padding:.8em;height:100%;margin:0}.ui-pnotify-container:after{content:" ";visibility:hidden;display:block;height:0;clear:both}.ui-pnotify-container.ui-pnotify-sharp{-webkit-border-radius:0;-moz-border-radius:0;border-radius:0}.ui-pnotify-title{display:block;white-space:pre-line;margin-bottom:.4em;margin-top:0}.ui-pnotify.ui-pnotify-with-icon .ui-pnotify-title,.ui-pnotify.ui-pnotify-with-icon .ui-pnotify-text{margin-left:24px}[dir=rtl] .ui-pnotify.ui-pnotify-with-icon .ui-pnotify-title,[dir=rtl] .ui-pnotify.ui-pnotify-with-icon .ui-pnotify-text{margin-right:24px;margin-left:0}.ui-pnotify-title-bs4{font-size:1.2rem}.ui-pnotify-text{display:block;white-space:pre-line}.ui-pnotify-icon,.ui-pnotify-icon span{display:block;float:left}[dir=rtl] .ui-pnotify-icon,[dir=rtl] .ui-pnotify-icon span{float:right}.ui-pnotify-icon-bs3 > span{position:relative;top:2px}.ui-pnotify-icon-bs4 > span{position:relative;top:4px}.ui-pnotify-modal-overlay{background-color:rgba(0, 0, 0, .4);top:0;left:0;position:absolute;height:100%;width:100%;z-index:2}body > .ui-pnotify-modal-overlay{position:fixed;z-index:100041}',appendNode(e,document.head)}function create_main_fragment(e,t){var i,o,n,s,r,a,c,l,f,d=[],u=blankObject(),h=[],m=blankObject(),p=t._modulesPrependContainer;const y=e=>e.module.key;for(var _=0;_<p.length;_+=1){let i=get_each_context(t,p,_),o=y(i);d[_]=u[o]=create_each_block(e,o,i)}var g=!1!==t.icon&&create_if_block(e,t),b=!1!==t.title&&create_if_block_1(e,t),v=!1!==t.text&&create_if_block_4(e,t),N=t._modulesAppendContainer;const x=e=>e.module.key;for(_=0;_<N.length;_+=1){let i=get_each_1_context(t,N,_),o=x(i);h[_]=m[o]=create_each_block_1(e,o,i)}function k(t){e.fire("mouseover",t)}function C(t){e.fire("mouseout",t)}function w(t){e.fire("mouseenter",t)}function P(t){e.fire("mouseleave",t)}function T(t){e.fire("mousemove",t)}function L(t){e.fire("mousedown",t)}function S(t){e.fire("mouseup",t)}function A(t){e.fire("click",t)}function O(t){e.fire("dblclick",t)}function H(t){e.fire("focus",t)}function E(t){e.fire("blur",t)}function j(t){e.fire("touchstart",t)}function M(t){e.fire("touchmove",t)}function B(t){e.fire("touchend",t)}function D(t){e.fire("touchcancel",t)}return{c(){for(i=createElement("div"),o=createElement("div"),_=0;_<d.length;_+=1)d[_].c();for(n=createText("\n    "),g&&g.c(),s=createText("\n    "),b&&b.c(),r=createText("\n    "),v&&v.c(),a=createText("\n    "),_=0;_<h.length;_+=1)h[_].c();o.className=c="\n        ui-pnotify-container\n        "+(t._styles.container?t._styles.container:"")+"\n        "+(t._styles[t.type]?t._styles[t.type]:"")+"\n        "+t.cornerClass+"\n        "+(t.shadow?"ui-pnotify-shadow":"")+"\n      ",o.style.cssText=l=t._widthStyle+" "+t._minHeightStyle,setAttribute(o,"role","alert"),addListener(i,"mouseover",k),addListener(i,"mouseout",C),addListener(i,"mouseenter",w),addListener(i,"mouseleave",P),addListener(i,"mousemove",T),addListener(i,"mousedown",L),addListener(i,"mouseup",S),addListener(i,"click",A),addListener(i,"dblclick",O),addListener(i,"focus",H),addListener(i,"blur",E),addListener(i,"touchstart",j),addListener(i,"touchmove",M),addListener(i,"touchend",B),addListener(i,"touchcancel",D),i.className=f="\n      ui-pnotify\n      "+(!1!==t.icon?"ui-pnotify-with-icon":"")+"\n      "+(t._styles.element?t._styles.element:"")+"\n      "+t.addClass+"\n      "+t._animatingClass+"\n      "+t._moveClass+"\n      "+("fade"===t.animation?"ui-pnotify-fade-"+t.animateSpeed:"")+"\n      "+(t.stack&&t.stack.modal?"ui-pnotify-modal":"")+"\n      "+t._moduleClasses.join(" ")+"\n    ",setAttribute(i,"aria-live","assertive"),setAttribute(i,"role","alertdialog"),setAttribute(i,"ui-pnotify",!0)},m(t,c){for(insertNode(i,t,c),appendNode(o,i),_=0;_<d.length;_+=1)d[_].m(o,null);for(appendNode(n,o),g&&g.m(o,null),appendNode(s,o),b&&b.m(o,null),appendNode(r,o),v&&v.m(o,null),appendNode(a,o),_=0;_<h.length;_+=1)h[_].m(o,null);e.refs.container=o,e.refs.elem=i},p(t,p){const _=p._modulesPrependContainer;d=updateKeyedEach(d,e,t,y,0,p,_,u,o,destroyBlock,create_each_block,"m",n,get_each_context),!1!==p.icon?g?g.p(t,p):((g=create_if_block(e,p)).c(),g.m(o,s)):g&&(g.d(1),g=null),!1!==p.title?b?b.p(t,p):((b=create_if_block_1(e,p)).c(),b.m(o,r)):b&&(b.d(1),b=null),!1!==p.text?v?v.p(t,p):((v=create_if_block_4(e,p)).c(),v.m(o,a)):v&&(v.d(1),v=null);const N=p._modulesAppendContainer;h=updateKeyedEach(h,e,t,x,0,p,N,m,o,destroyBlock,create_each_block_1,"m",null,get_each_1_context),(t._styles||t.type||t.cornerClass||t.shadow)&&c!==(c="\n        ui-pnotify-container\n        "+(p._styles.container?p._styles.container:"")+"\n        "+(p._styles[p.type]?p._styles[p.type]:"")+"\n        "+p.cornerClass+"\n        "+(p.shadow?"ui-pnotify-shadow":"")+"\n      ")&&(o.className=c),(t._widthStyle||t._minHeightStyle)&&l!==(l=p._widthStyle+" "+p._minHeightStyle)&&(o.style.cssText=l),(t.icon||t._styles||t.addClass||t._animatingClass||t._moveClass||t.animation||t.animateSpeed||t.stack||t._moduleClasses)&&f!==(f="\n      ui-pnotify\n      "+(!1!==p.icon?"ui-pnotify-with-icon":"")+"\n      "+(p._styles.element?p._styles.element:"")+"\n      "+p.addClass+"\n      "+p._animatingClass+"\n      "+p._moveClass+"\n      "+("fade"===p.animation?"ui-pnotify-fade-"+p.animateSpeed:"")+"\n      "+(p.stack&&p.stack.modal?"ui-pnotify-modal":"")+"\n      "+p._moduleClasses.join(" ")+"\n    ")&&(i.className=f)},d(t){for(t&&detachNode(i),_=0;_<d.length;_+=1)d[_].d();for(g&&g.d(),b&&b.d(),v&&v.d(),_=0;_<h.length;_+=1)h[_].d();e.refs.container===o&&(e.refs.container=null),removeListener(i,"mouseover",k),removeListener(i,"mouseout",C),removeListener(i,"mouseenter",w),removeListener(i,"mouseleave",P),removeListener(i,"mousemove",T),removeListener(i,"mousedown",L),removeListener(i,"mouseup",S),removeListener(i,"click",A),removeListener(i,"dblclick",O),removeListener(i,"focus",H),removeListener(i,"blur",E),removeListener(i,"touchstart",j),removeListener(i,"touchmove",M),removeListener(i,"touchend",B),removeListener(i,"touchcancel",D),e.refs.elem===i&&(e.refs.elem=null)}}}function create_each_block(e,t,i){var o,n,s=i.module;if(s)var r=new s({root:e.root});return r&&r.on("init",function(t){e.initModule(t.module)}),{key:t,first:null,c(){o=createComment(),n=createComment(),r&&r._fragment.c(),this.first=o},m(e,t){insertNode(o,e,t),insertNode(n,e,t),r&&r._mount(e,t)},d(e){e&&(detachNode(o),detachNode(n)),r&&r.destroy(e)}}}function create_if_block(e,t){var i,o,n,s;return{c(){i=createElement("div"),(o=createElement("span")).className=n=!0===t.icon?t._icons[t.type]?t._icons[t.type]:"":t.icon,i.className=s="ui-pnotify-icon "+(t._styles.icon?t._styles.icon:"")},m(t,n){insertNode(i,t,n),appendNode(o,i),e.refs.iconContainer=i},p(e,t){(e.icon||e._icons||e.type)&&n!==(n=!0===t.icon?t._icons[t.type]?t._icons[t.type]:"":t.icon)&&(o.className=n),e._styles&&s!==(s="ui-pnotify-icon "+(t._styles.icon?t._styles.icon:""))&&(i.className=s)},d(t){t&&detachNode(i),e.refs.iconContainer===i&&(e.refs.iconContainer=null)}}}function create_if_block_2(e,t){var i,o;return{c(){i=createElement("noscript"),o=createElement("noscript")},m(e,n){insertNode(i,e,n),i.insertAdjacentHTML("afterend",t.title),insertNode(o,e,n)},p(e,t){e.title&&(detachBetween(i,o),i.insertAdjacentHTML("afterend",t.title))},d(e){e&&(detachBetween(i,o),detachNode(i),detachNode(o))}}}function create_if_block_3(e,t){var i;return{c(){i=createText(t.title)},m(e,t){insertNode(i,e,t)},p(e,t){e.title&&(i.data=t.title)},d(e){e&&detachNode(i)}}}function create_if_block_1(e,t){var i,o;function n(e){return e.titleTrusted?create_if_block_2:create_if_block_3}var s=n(t),r=s(e,t);return{c(){i=createElement("h4"),r.c(),i.className=o="ui-pnotify-title "+(t._styles.title?t._styles.title:"")},m(t,o){insertNode(i,t,o),r.m(i,null),e.refs.titleContainer=i},p(t,a){s===(s=n(a))&&r?r.p(t,a):(r.d(1),(r=s(e,a)).c(),r.m(i,null)),t._styles&&o!==(o="ui-pnotify-title "+(a._styles.title?a._styles.title:""))&&(i.className=o)},d(t){t&&detachNode(i),r.d(),e.refs.titleContainer===i&&(e.refs.titleContainer=null)}}}function create_if_block_5(e,t){var i,o;return{c(){i=createElement("noscript"),o=createElement("noscript")},m(e,n){insertNode(i,e,n),i.insertAdjacentHTML("afterend",t.text),insertNode(o,e,n)},p(e,t){e.text&&(detachBetween(i,o),i.insertAdjacentHTML("afterend",t.text))},d(e){e&&(detachBetween(i,o),detachNode(i),detachNode(o))}}}function create_if_block_6(e,t){var i;return{c(){i=createText(t.text)},m(e,t){insertNode(i,e,t)},p(e,t){e.text&&(i.data=t.text)},d(e){e&&detachNode(i)}}}function create_if_block_4(e,t){var i,o;function n(e){return e.textTrusted?create_if_block_5:create_if_block_6}var s=n(t),r=s(e,t);return{c(){i=createElement("div"),r.c(),i.className=o="ui-pnotify-text "+(t._styles.text?t._styles.text:""),setAttribute(i,"role","alert")},m(t,o){insertNode(i,t,o),r.m(i,null),e.refs.textContainer=i},p(t,a){s===(s=n(a))&&r?r.p(t,a):(r.d(1),(r=s(e,a)).c(),r.m(i,null)),t._styles&&o!==(o="ui-pnotify-text "+(a._styles.text?a._styles.text:""))&&(i.className=o)},d(t){t&&detachNode(i),r.d(),e.refs.textContainer===i&&(e.refs.textContainer=null)}}}function create_each_block_1(e,t,i){var o,n,s=i.module;if(s)var r=new s({root:e.root});return r&&r.on("init",function(t){e.initModule(t.module)}),{key:t,first:null,c(){o=createComment(),n=createComment(),r&&r._fragment.c(),this.first=o},m(e,t){insertNode(o,e,t),insertNode(n,e,t),r&&r._mount(e,t)},d(e){e&&(detachNode(o),detachNode(n)),r&&r.destroy(e)}}}function get_each_context(e,t,i){const o=Object.create(e);return o.module=t[i],o.each_value=t,o.module_index=i,o}function get_each_1_context(e,t,i){const o=Object.create(e);return o.module=t[i],o.each_value_1=t,o.module_index_1=i,o}function PNotify_1(e){init(this,e),this.refs={},this._state=assign(data(),e.data),this._recompute({styling:1,icons:1,width:1,minHeight:1},this._state),this._intro=!0,document.getElementById("svelte-1eldsjg-style")||add_css(),e.root||(this._oncreate=[],this._beforecreate=[],this._aftercreate=[]),this._fragment=create_main_fragment(this,this._state),this.root._oncreate.push(()=>{oncreate.call(this),this.fire("update",{changed:assignTrue({},this._state),current:this._state})}),e.target&&(this._fragment.c(),this._mount(e.target,e.anchor),this._lock=!0,callAll(this._beforecreate),callAll(this._oncreate),callAll(this._aftercreate),this._lock=!1)}function createElement(e){return document.createElement(e)}function appendNode(e,t){t.appendChild(e)}function blankObject(){return Object.create(null)}function createText(e){return document.createTextNode(e)}function setAttribute(e,t,i){e.setAttribute(t,i)}function addListener(e,t,i){e.addEventListener(t,i,!1)}function insertNode(e,t,i){t.insertBefore(e,i)}function updateKeyedEach(e,t,i,o,n,s,r,a,c,l,f,d,u,h){for(var m=e.length,p=r.length,y=m,_={};y--;)_[e[y].key]=y;var g=[],b={},v={};for(y=p;y--;){var N=h(s,r,y),x=o(N),k=a[x];k?n&&k.p(i,N):(k=f(t,x,N)).c(),g[y]=b[x]=k,x in _&&(v[x]=Math.abs(y-_[x]))}var C={},w={};function P(e){e[d](c,u),a[e.key]=e,u=e.first,p--}for(;m&&p;){var T=g[p-1],L=e[m-1],S=T.key,A=L.key;T===L?(u=T.first,m--,p--):b[A]?!a[S]||C[S]?P(T):w[A]?m--:v[S]>v[A]?(w[S]=!0,P(T)):(C[A]=!0,m--):(l(L,a),m--)}for(;m--;){b[(L=e[m]).key]||l(L,a)}for(;p;)P(g[p-1]);return g}function destroyBlock(e,t){e.d(1),t[e.key]=null}function detachNode(e){e.parentNode.removeChild(e)}function removeListener(e,t,i){e.removeEventListener(t,i,!1)}function createComment(){return document.createComment("")}function detachBetween(e,t){for(;e.nextSibling&&e.nextSibling!==t;)e.parentNode.removeChild(e.nextSibling)}function init(e,t){e._handlers=blankObject(),e._bind=t._bind,e.options=t,e.root=t.root||e,e.store=e.root.store||t.store}function assign(e,t){for(var i in t)e[i]=t[i];return e}function assignTrue(e,t){for(var i in t)e[i]=1;return e}function callAll(e){for(;e&&e.length;)e.shift()()}function destroy(e){this.destroy=noop,this.fire("destroy"),this.set=noop,this._fragment.d(!1!==e),this._fragment=null,this._state={}}function get(){return this._state}function fire(e,t){var i=e in this._handlers&&this._handlers[e].slice();if(i)for(var o=0;o<i.length;o+=1){var n=i[o];n.__calling||(n.__calling=!0,n.call(this,t),n.__calling=!1)}}function on(e,t){var i=this._handlers[e]||(this._handlers[e]=[]);return i.push(t),{cancel:function(){var e=i.indexOf(t);~e&&i.splice(e,1)}}}function set(e){this._set(assign({},e)),this.root._lock||(this.root._lock=!0,callAll(this.root._beforecreate),callAll(this.root._oncreate),callAll(this.root._aftercreate),this.root._lock=!1)}function _set(e){var t=this._state,i={},o=!1;for(var n in e)this._differs(e[n],t[n])&&(i[n]=o=!0);o&&(this._state=assign(assign({},t),e),this._recompute(i,this._state),this._bind&&this._bind(i,this._state),this._fragment&&(this.fire("state",{changed:i,current:this._state,previous:t}),this._fragment.p(i,this._state),this.fire("update",{changed:i,current:this._state,previous:t})))}function _mount(e,t){this._fragment[this._fragment.i?"i":"m"](e,t||null)}function _differs(e,t){return e!=e?t==t:e!==t||e&&"object"==typeof e||"function"==typeof e}function noop(){}assign(PNotify_1.prototype,{destroy:destroy,get:get,fire:fire,on:on,set:set,_set:_set,_mount:_mount,_differs:_differs}),assign(PNotify_1.prototype,methods),PNotify_1.prototype._recompute=function(e,t){e.styling&&this._differs(t._styles,t._styles=_styles(t))&&(e._styles=!0),e.icons&&this._differs(t._icons,t._icons=_icons(t))&&(e._icons=!0),e.width&&this._differs(t._widthStyle,t._widthStyle=_widthStyle(t))&&(e._widthStyle=!0),e.minHeight&&this._differs(t._minHeightStyle,t._minHeightStyle=_minHeightStyle(t))&&(e._minHeightStyle=!0)},setup(PNotify_1);/* harmony default export */ __webpack_exports__["default"] = (PNotify_1);
-//# sourceMappingURL=PNotify.js.map
-
-/***/ }),
-/* 38 */
-/***/ (function(module, exports) {
-
 // removed by extract-text-webpack-plugin
 
 /***/ }),
+/* 37 */,
+/* 38 */,
 /* 39 */,
 /* 40 */,
-/* 41 */,
-/* 42 */,
+/* 41 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*
+ * Toastr
+ * Copyright 2012-2015
+ * Authors: John Papa, Hans Fjällemark, and Tim Ferrell.
+ * All Rights Reserved.
+ * Use, reproduction, distribution, and modification of this code is subject to the terms and
+ * conditions of the MIT license, available at http://www.opensource.org/licenses/mit-license.php
+ *
+ * ARIA Support: Greta Krafsig
+ *
+ * Project: https://github.com/CodeSeven/toastr
+ */
+/* global define */
+(function (define) {
+    !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(4)], __WEBPACK_AMD_DEFINE_RESULT__ = (function ($) {
+        return (function () {
+            var $container;
+            var listener;
+            var toastId = 0;
+            var toastType = {
+                error: 'error',
+                info: 'info',
+                success: 'success',
+                warning: 'warning'
+            };
+
+            var toastr = {
+                clear: clear,
+                remove: remove,
+                error: error,
+                getContainer: getContainer,
+                info: info,
+                options: {},
+                subscribe: subscribe,
+                success: success,
+                version: '2.1.4',
+                warning: warning
+            };
+
+            var previousToast;
+
+            return toastr;
+
+            ////////////////
+
+            function error(message, title, optionsOverride) {
+                return notify({
+                    type: toastType.error,
+                    iconClass: getOptions().iconClasses.error,
+                    message: message,
+                    optionsOverride: optionsOverride,
+                    title: title
+                });
+            }
+
+            function getContainer(options, create) {
+                if (!options) { options = getOptions(); }
+                $container = $('#' + options.containerId);
+                if ($container.length) {
+                    return $container;
+                }
+                if (create) {
+                    $container = createContainer(options);
+                }
+                return $container;
+            }
+
+            function info(message, title, optionsOverride) {
+                return notify({
+                    type: toastType.info,
+                    iconClass: getOptions().iconClasses.info,
+                    message: message,
+                    optionsOverride: optionsOverride,
+                    title: title
+                });
+            }
+
+            function subscribe(callback) {
+                listener = callback;
+            }
+
+            function success(message, title, optionsOverride) {
+                return notify({
+                    type: toastType.success,
+                    iconClass: getOptions().iconClasses.success,
+                    message: message,
+                    optionsOverride: optionsOverride,
+                    title: title
+                });
+            }
+
+            function warning(message, title, optionsOverride) {
+                return notify({
+                    type: toastType.warning,
+                    iconClass: getOptions().iconClasses.warning,
+                    message: message,
+                    optionsOverride: optionsOverride,
+                    title: title
+                });
+            }
+
+            function clear($toastElement, clearOptions) {
+                var options = getOptions();
+                if (!$container) { getContainer(options); }
+                if (!clearToast($toastElement, options, clearOptions)) {
+                    clearContainer(options);
+                }
+            }
+
+            function remove($toastElement) {
+                var options = getOptions();
+                if (!$container) { getContainer(options); }
+                if ($toastElement && $(':focus', $toastElement).length === 0) {
+                    removeToast($toastElement);
+                    return;
+                }
+                if ($container.children().length) {
+                    $container.remove();
+                }
+            }
+
+            // internal functions
+
+            function clearContainer (options) {
+                var toastsToClear = $container.children();
+                for (var i = toastsToClear.length - 1; i >= 0; i--) {
+                    clearToast($(toastsToClear[i]), options);
+                }
+            }
+
+            function clearToast ($toastElement, options, clearOptions) {
+                var force = clearOptions && clearOptions.force ? clearOptions.force : false;
+                if ($toastElement && (force || $(':focus', $toastElement).length === 0)) {
+                    $toastElement[options.hideMethod]({
+                        duration: options.hideDuration,
+                        easing: options.hideEasing,
+                        complete: function () { removeToast($toastElement); }
+                    });
+                    return true;
+                }
+                return false;
+            }
+
+            function createContainer(options) {
+                $container = $('<div/>')
+                    .attr('id', options.containerId)
+                    .addClass(options.positionClass);
+
+                $container.appendTo($(options.target));
+                return $container;
+            }
+
+            function getDefaults() {
+                return {
+                    tapToDismiss: true,
+                    toastClass: 'toast',
+                    containerId: 'toast-container',
+                    debug: false,
+
+                    showMethod: 'fadeIn', //fadeIn, slideDown, and show are built into jQuery
+                    showDuration: 300,
+                    showEasing: 'swing', //swing and linear are built into jQuery
+                    onShown: undefined,
+                    hideMethod: 'fadeOut',
+                    hideDuration: 1000,
+                    hideEasing: 'swing',
+                    onHidden: undefined,
+                    closeMethod: false,
+                    closeDuration: false,
+                    closeEasing: false,
+                    closeOnHover: true,
+
+                    extendedTimeOut: 1000,
+                    iconClasses: {
+                        error: 'toast-error',
+                        info: 'toast-info',
+                        success: 'toast-success',
+                        warning: 'toast-warning'
+                    },
+                    iconClass: 'toast-info',
+                    positionClass: 'toast-top-right',
+                    timeOut: 5000, // Set timeOut and extendedTimeOut to 0 to make it sticky
+                    titleClass: 'toast-title',
+                    messageClass: 'toast-message',
+                    escapeHtml: false,
+                    target: 'body',
+                    closeHtml: '<button type="button">&times;</button>',
+                    closeClass: 'toast-close-button',
+                    newestOnTop: true,
+                    preventDuplicates: false,
+                    progressBar: false,
+                    progressClass: 'toast-progress',
+                    rtl: false
+                };
+            }
+
+            function publish(args) {
+                if (!listener) { return; }
+                listener(args);
+            }
+
+            function notify(map) {
+                var options = getOptions();
+                var iconClass = map.iconClass || options.iconClass;
+
+                if (typeof (map.optionsOverride) !== 'undefined') {
+                    options = $.extend(options, map.optionsOverride);
+                    iconClass = map.optionsOverride.iconClass || iconClass;
+                }
+
+                if (shouldExit(options, map)) { return; }
+
+                toastId++;
+
+                $container = getContainer(options, true);
+
+                var intervalId = null;
+                var $toastElement = $('<div/>');
+                var $titleElement = $('<div/>');
+                var $messageElement = $('<div/>');
+                var $progressElement = $('<div/>');
+                var $closeElement = $(options.closeHtml);
+                var progressBar = {
+                    intervalId: null,
+                    hideEta: null,
+                    maxHideTime: null
+                };
+                var response = {
+                    toastId: toastId,
+                    state: 'visible',
+                    startTime: new Date(),
+                    options: options,
+                    map: map
+                };
+
+                personalizeToast();
+
+                displayToast();
+
+                handleEvents();
+
+                publish(response);
+
+                if (options.debug && console) {
+                    console.log(response);
+                }
+
+                return $toastElement;
+
+                function escapeHtml(source) {
+                    if (source == null) {
+                        source = '';
+                    }
+
+                    return source
+                        .replace(/&/g, '&amp;')
+                        .replace(/"/g, '&quot;')
+                        .replace(/'/g, '&#39;')
+                        .replace(/</g, '&lt;')
+                        .replace(/>/g, '&gt;');
+                }
+
+                function personalizeToast() {
+                    setIcon();
+                    setTitle();
+                    setMessage();
+                    setCloseButton();
+                    setProgressBar();
+                    setRTL();
+                    setSequence();
+                    setAria();
+                }
+
+                function setAria() {
+                    var ariaValue = '';
+                    switch (map.iconClass) {
+                        case 'toast-success':
+                        case 'toast-info':
+                            ariaValue =  'polite';
+                            break;
+                        default:
+                            ariaValue = 'assertive';
+                    }
+                    $toastElement.attr('aria-live', ariaValue);
+                }
+
+                function handleEvents() {
+                    if (options.closeOnHover) {
+                        $toastElement.hover(stickAround, delayedHideToast);
+                    }
+
+                    if (!options.onclick && options.tapToDismiss) {
+                        $toastElement.click(hideToast);
+                    }
+
+                    if (options.closeButton && $closeElement) {
+                        $closeElement.click(function (event) {
+                            if (event.stopPropagation) {
+                                event.stopPropagation();
+                            } else if (event.cancelBubble !== undefined && event.cancelBubble !== true) {
+                                event.cancelBubble = true;
+                            }
+
+                            if (options.onCloseClick) {
+                                options.onCloseClick(event);
+                            }
+
+                            hideToast(true);
+                        });
+                    }
+
+                    if (options.onclick) {
+                        $toastElement.click(function (event) {
+                            options.onclick(event);
+                            hideToast();
+                        });
+                    }
+                }
+
+                function displayToast() {
+                    $toastElement.hide();
+
+                    $toastElement[options.showMethod](
+                        {duration: options.showDuration, easing: options.showEasing, complete: options.onShown}
+                    );
+
+                    if (options.timeOut > 0) {
+                        intervalId = setTimeout(hideToast, options.timeOut);
+                        progressBar.maxHideTime = parseFloat(options.timeOut);
+                        progressBar.hideEta = new Date().getTime() + progressBar.maxHideTime;
+                        if (options.progressBar) {
+                            progressBar.intervalId = setInterval(updateProgress, 10);
+                        }
+                    }
+                }
+
+                function setIcon() {
+                    if (map.iconClass) {
+                        $toastElement.addClass(options.toastClass).addClass(iconClass);
+                    }
+                }
+
+                function setSequence() {
+                    if (options.newestOnTop) {
+                        $container.prepend($toastElement);
+                    } else {
+                        $container.append($toastElement);
+                    }
+                }
+
+                function setTitle() {
+                    if (map.title) {
+                        var suffix = map.title;
+                        if (options.escapeHtml) {
+                            suffix = escapeHtml(map.title);
+                        }
+                        $titleElement.append(suffix).addClass(options.titleClass);
+                        $toastElement.append($titleElement);
+                    }
+                }
+
+                function setMessage() {
+                    if (map.message) {
+                        var suffix = map.message;
+                        if (options.escapeHtml) {
+                            suffix = escapeHtml(map.message);
+                        }
+                        $messageElement.append(suffix).addClass(options.messageClass);
+                        $toastElement.append($messageElement);
+                    }
+                }
+
+                function setCloseButton() {
+                    if (options.closeButton) {
+                        $closeElement.addClass(options.closeClass).attr('role', 'button');
+                        $toastElement.prepend($closeElement);
+                    }
+                }
+
+                function setProgressBar() {
+                    if (options.progressBar) {
+                        $progressElement.addClass(options.progressClass);
+                        $toastElement.prepend($progressElement);
+                    }
+                }
+
+                function setRTL() {
+                    if (options.rtl) {
+                        $toastElement.addClass('rtl');
+                    }
+                }
+
+                function shouldExit(options, map) {
+                    if (options.preventDuplicates) {
+                        if (map.message === previousToast) {
+                            return true;
+                        } else {
+                            previousToast = map.message;
+                        }
+                    }
+                    return false;
+                }
+
+                function hideToast(override) {
+                    var method = override && options.closeMethod !== false ? options.closeMethod : options.hideMethod;
+                    var duration = override && options.closeDuration !== false ?
+                        options.closeDuration : options.hideDuration;
+                    var easing = override && options.closeEasing !== false ? options.closeEasing : options.hideEasing;
+                    if ($(':focus', $toastElement).length && !override) {
+                        return;
+                    }
+                    clearTimeout(progressBar.intervalId);
+                    return $toastElement[method]({
+                        duration: duration,
+                        easing: easing,
+                        complete: function () {
+                            removeToast($toastElement);
+                            clearTimeout(intervalId);
+                            if (options.onHidden && response.state !== 'hidden') {
+                                options.onHidden();
+                            }
+                            response.state = 'hidden';
+                            response.endTime = new Date();
+                            publish(response);
+                        }
+                    });
+                }
+
+                function delayedHideToast() {
+                    if (options.timeOut > 0 || options.extendedTimeOut > 0) {
+                        intervalId = setTimeout(hideToast, options.extendedTimeOut);
+                        progressBar.maxHideTime = parseFloat(options.extendedTimeOut);
+                        progressBar.hideEta = new Date().getTime() + progressBar.maxHideTime;
+                    }
+                }
+
+                function stickAround() {
+                    clearTimeout(intervalId);
+                    progressBar.hideEta = 0;
+                    $toastElement.stop(true, true)[options.showMethod](
+                        {duration: options.showDuration, easing: options.showEasing}
+                    );
+                }
+
+                function updateProgress() {
+                    var percentage = ((progressBar.hideEta - (new Date().getTime())) / progressBar.maxHideTime) * 100;
+                    $progressElement.width(percentage + '%');
+                }
+            }
+
+            function getOptions() {
+                return $.extend({}, getDefaults(), toastr.options);
+            }
+
+            function removeToast($toastElement) {
+                if (!$container) { $container = getContainer(); }
+                if ($toastElement.is(':visible')) {
+                    return;
+                }
+                $toastElement.remove();
+                $toastElement = null;
+                if ($container.children().length === 0) {
+                    $container.remove();
+                    previousToast = undefined;
+                }
+            }
+
+        })();
+    }).apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__),
+				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+}(__webpack_require__(42)));
+
+
+/***/ }),
+/* 42 */
+/***/ (function(module, exports) {
+
+module.exports = function() {
+	throw new Error("define cannot be used indirect");
+};
+
+
+/***/ }),
 /* 43 */
 /***/ (function(module, exports) {
 

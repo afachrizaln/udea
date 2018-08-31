@@ -24,7 +24,7 @@ class ClassroomController extends Controller
                 $message = 'Kode kelas cocok. Berhasil gabung ke dalam kelas.';
                 $type = 'success';
             } else {
-                $message = 'Tidak diperbolehkan mengambil kelas dengan mata kuliah yang sama.';
+                $message = 'Tidak dapat mengambil kelas dengan mata kuliah yang sama.';
             }
         } 
         $notification = [

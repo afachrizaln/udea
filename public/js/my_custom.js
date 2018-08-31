@@ -1,39 +1,32 @@
 (function(){
-		
     // Don't go any further down the script if [data-notification] is not set.
     if (!document.body.dataset.notification)
         return false;
     
-    var type = document.body.dataset.notificationType;
-    var opts = {
-        text: JSON.parse(document.body.dataset.notificationMessage),
+    var toast_type = document.body.dataset.notificationType;
+    var toast_text = JSON.parse(document.body.dataset.notificationMessage);
+    toastr.options = {
+        "closeButton": true,
+        "positionClass": "toast-bottom-right",
+        "progressBar": true,
+        "showDuration": "1000",
+        "hideDuration": "1000",
+        "timeOut": "5000",
+        "extendedTimeOut": "3000",
     };
-    switch (type) {
+    switch (toast_type) {
         case 'error':
-        opts.type = 'error';
-        opts.title = "Terjadi Kesalahan!";
-        opts.icon = "icofont icofont-close-circled",
-        opts.addclass = "translucent stack-bottom-right bg-danger";
-        opts.delay = 4000;
+        toastr["error"](toast_text, "Terjadi Kesalahan!")
         break;
 
         case 'info':
-        opts.type = 'info';
-        opts.title = "Info";
-        opts.icon = "icofont icofont-info-circle",
-        opts.addclass = "translucent stack-bottom-right bg-info";
-        opts.delay = 4000;
+        toastr["info"](toast_text, "Info!")
         break;
 
         case 'success':
-        opts.type = 'success';
-        opts.title = "Berhasil";
-        opts.icon = "icofont icofont-check-circled",
-        opts.addclass = "translucent stack-bottom-right bg-primary";
-        opts.delay = 4000;
+        toastr["success"](toast_text, "Berhasil!")
         break;
     }
-    new PNotify(opts);
 })();
 
 $(document).ready(function(){

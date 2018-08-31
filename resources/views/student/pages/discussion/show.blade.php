@@ -110,8 +110,6 @@
 @endsection
 
 @section('scripts')
-<!-- Accordion js -->
-<script type="text/javascript" src="{{ asset('ablepro/assets/pages/accordion/accordion.js') }}"></script>
 <!-- counter js -->
 <script src="{{ asset('ablepro/bower_components/countdown/js/jquery.countdown.js') }}"></script>
 {{-- <script src="{{ asset('ablepro/assets/pages/counter/task-detail.js') }}"></script> --}}
@@ -130,8 +128,4 @@ $(document).ready(function() {
     });
 });
 </script>
-<script type="text/javascript">
-  PNotify.alert('Notice me, senpai!');
-</script>
-
 @endsection

@@ -90,6 +90,5 @@
 @endsection
 
 @section('scripts')
-<!-- Accordion js -->
-<script type="text/javascript" src="{{ asset('ablepro/assets/pages/accordion/accordion.js') }}"></script>
+
 @endsection

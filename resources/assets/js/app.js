@@ -10,6 +10,6 @@ require('./bootstrap');
 
 window.jqueryslimscroll = require('jquery-slimscroll');
 
-window.smartwizard = require('smartwizard');
+// window.smartwizard = require('smartwizard');
 
-window.pnotify = require('pnotify/dist/es/PNotify');
+window.toastr = require('toastr');
