@@ -93,11 +93,15 @@
 <script type="text/javascript" src="{{ asset('ablepro/bower_components/moment/js/moment.min.js') }}"></script>
 <script type="text/javascript" src="{{ asset('ablepro/bower_components/moment/js/moment-with-locales.js') }}"></script>
 <!-- calender js -->
-<script type="text/javascript" src="{{ asset('ablepro/bower_components/fullcalendar/js/fullcalendar.min.js') }}"></script>
-<script type="text/javascript" src="{{ asset('ablepro/assets/pages/full-calender/calendar.js') }}"></script>
+<!-- <script type="text/javascript" src="{{ asset('ablepro/bower_components/fullcalendar/js/fullcalendar.min.js') }}"></script>
+<script type="text/javascript" src="{{ asset('ablepro/assets/pages/full-calender/calendar.js') }}"></script> -->
 
 <script>
 $(document).ready(function() {
+    $('#calendar').fullCalendar({
+        locale: 'id'
+    })
+
     var interval = setInterval(function() {
         var momentNow = moment.locale('id');
         $('#date-part').html(moment().format('dddd') + ', ' + moment().format('DD MMM YYYY'));

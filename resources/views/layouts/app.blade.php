@@ -22,8 +22,6 @@
 	<link rel="icon" href="{{ asset('ablepro/assets/images/favicon.ico') }}" type="image/x-icon">
 	<!-- app css -->
 	<link rel="stylesheet" type="text/css" href=" {{ asset('css/app.css') }} " />
-	<!-- Required Fremwork -->
-	<link rel="stylesheet" type="text/css" href="{{ asset('ablepro/bower_components/bootstrap/css/bootstrap.min.css') }}">
 	<!-- waves.css -->
 	<link rel="stylesheet" type="text/css" href="{{ asset('ablepro/assets/pages/waves/css/waves.min.css') }}" type="text/css" media="all">
 	<!-- feather icon -->
@@ -32,7 +30,6 @@
 	<link rel="stylesheet" type="text/css" href="{{ asset('ablepro/assets/icon/icofont/css/icofont.css') }}">
 	@yield('styles')
 	<link rel="stylesheet" type="text/css" href="{{ asset('ablepro/assets/css/style.css') }}">
-	<link rel="stylesheet" type="text/css" href="{{ asset('ablepro/assets/css/pages.css') }}">
 	<link rel="stylesheet" type="text/css" href="{{ asset('css/my_custom.css') }}">
 </head>
 

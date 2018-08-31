@@ -13,3 +13,5 @@ window.jqueryslimscroll = require('jquery-slimscroll');
 // window.smartwizard = require('smartwizard');
 
 window.toastr = require('toastr');
+
+window.fullcalendar = require('fullcalendar');
