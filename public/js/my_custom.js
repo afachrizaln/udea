@@ -29,26 +29,24 @@
     }
 })();
 
-$(document).ready(function(){
-    // $('#filer_input').filer({
-    //     maxSize: 10,
-    //     extensions: ['ppt', 'pdf', 'doc'],
-    //     changeInput: true,
-    //     showThumbs: true,
-    //     addMore: false,
-    //     captions: {
-    //         button: "Pilih File",
-    //         feedback: "Pilih file yang akan diupload",
-    //         feedback2: "file telah dipilih.",
-    //         drop: "Drop file kesini untuk diupload.",
-    //         removeConfirmation: "Apakah kamu yakin menghapus file ini?",
-    //         errors: {
-    //             filesLimit: "Hanya file sebanyak {{fi-limit}} yang diperbolehkan.",
-    //             filesType: "Tipe file tidak support, pastikan hanya mengupload file dengan ekstensi pdf/ppt/doc.",
-    //             filesSize: "{{fi-name}} terlalu besar! Silahkan upload dengan kapasitas kurang dari {{fi-maxSize}} MB.",
-    //         }
-    //     }
-    // });
+$('#filer_input').filer({
+    maxSize: 10,
+    extensions: ['ppt', 'pdf', 'doc'],
+    changeInput: true,
+    showThumbs: true,
+    addMore: false,
+    captions: {
+        button: "Pilih File",
+        feedback: "Pilih file yang diupload",
+        feedback2: "file telah dipilih.",
+        drop: "Drop file kesini untuk diupload.",
+        removeConfirmation: "Apakah kamu yakin menghapus file ini?",
+        errors: {
+            filesLimit: "Hanya file sebanyak {{fi-limit}} yang diperbolehkan.",
+            filesType: "Tipe file tidak support, pastikan hanya mengupload file dengan ekstensi pdf/ppt/doc.",
+            filesSize: "{{fi-name}} terlalu besar! Silahkan upload dengan kapasitas kurang dari {{fi-maxSize}} MB.",
+        }
+    }
 });
 
 $('#pcoded').pcodedmenu({ 

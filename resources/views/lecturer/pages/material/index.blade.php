@@ -60,12 +60,12 @@
                                                             <td>{{ ($keyChapter+1) . '.' . ($keySubChapter+1) }}</td>
                                                             <td>{{ $rowSubChapter->title }}</td>
                                                             <td>Belum ada file</td>
-                                                            @if($keySubChapter == 0)
-                                                            <td rowspan="{{ $rowChapter->subChapter->count() + 1 }}"><div class="action-icon">
-                                                                <a href="{{ route('lecturer.material.show', $rowChapter->slug) }}"><i class="feather icon-edit"></i></a>
-                                                                <a href="#"><i class="feather icon-trash"></i></a>
-                                                            </div></td>
-                                                            @endif
+                                                            <td>
+                                                                <div class="action-icon">
+                                                                    <a href="{{ route('lecturer.material.show', $rowSubChapter->slug) }}"><i class="feather icon-edit"></i></a>
+                                                                    <a href="#"><i class="feather icon-trash"></i></a>
+                                                                </div>
+                                                            </td>
                                                         </tr>
                                                     @endforeach
                                                 @endforeach

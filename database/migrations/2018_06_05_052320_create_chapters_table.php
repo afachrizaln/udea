@@ -17,8 +17,8 @@ class CreateChaptersTable extends Migration
             $table->increments('id');
             $table->integer('course_id')->unsigned();
             $table->string('title');
-            $table->text('description');
             $table->string('slug')->unique();
+            $table->text('description');
             $table->timestamps();
 
             $table->foreign('course_id')->references('id')->on('courses')

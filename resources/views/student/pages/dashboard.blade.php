@@ -1,9 +1,6 @@
 @extends('layouts.app')
 
 @section('styles')
-<!-- Calender css -->
-<link rel="stylesheet" type="text/css" href="{{ asset('ablepro/bower_components/fullcalendar/css/fullcalendar.css') }}">
-<link rel="stylesheet" type="text/css" href="{{ asset('ablepro/bower_components/fullcalendar/css/fullcalendar.print.css') }}" media='print'>
 @endsection
 
 @section('breadcumb')

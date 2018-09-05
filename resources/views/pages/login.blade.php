@@ -20,6 +20,8 @@
     <!-- Favicon icon -->
 
     <link rel="icon" href="{{ asset('ablepro/assets/images/favicon.ico') }}" type="image/x-icon">
+    <!-- app css -->
+    <link rel="stylesheet" type="text/css" href=" {{ asset('css/app.css') }} " />
     <!-- Google font-->     
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800" rel="stylesheet">
     <!-- Required Fremwork -->
@@ -216,12 +218,9 @@
         <p>Sorry for the inconvenience!</p>
     </div>
     <![endif]-->
-        <!-- Warning Section Ends -->
-    <!-- Required Jquery -->
-    <script type="text/javascript" src="{{ asset('ablepro/bower_components/jquery/js/jquery.min.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('ablepro/bower_components/jquery-ui/js/jquery-ui.min.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('ablepro/bower_components/popper.js/js/popper.min.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('ablepro/bower_components/bootstrap/js/bootstrap.min.js') }}"></script>
+    <!-- Warning Section Ends -->
+    <!-- app js -->
+	<script type="text/javascript" src=" {{ asset('js/app.js') }}"></script>
     <!-- waves js -->
     <script src="{{ asset('ablepro/assets/pages/waves/js/waves.min.js') }}"></script>
     <!-- jquery slimscroll js -->
@@ -229,12 +228,6 @@
     <!-- modernizr js -->
     <script type="text/javascript" src="{{ asset('ablepro/bower_components/modernizr/js/modernizr.js') }}"></script>
     <script type="text/javascript" src="{{ asset('ablepro/bower_components/modernizr/js/css-scrollbars.js') }}"></script>
-    <!-- i18next.min.js -->
-    <script type="text/javascript" src="{{ asset('ablepro/bower_components/i18next/js/i18next.min.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('ablepro/bower_components/i18next-xhr-backend/js/i18nextXHRBackend.min.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('ablepro/bower_components/i18next-browser-languagedetector/js/i18nextBrowserLanguageDetector.min.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('ablepro/bower_components/jquery-i18next/js/jquery-i18next.min.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('ablepro/assets/js/common-pages.js') }}"></script>
 </body>
 
 </html>

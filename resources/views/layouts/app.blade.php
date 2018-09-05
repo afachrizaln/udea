@@ -29,7 +29,9 @@
 	<!-- ico font -->
 	<link rel="stylesheet" type="text/css" href="{{ asset('ablepro/assets/icon/icofont/css/icofont.css') }}">
 	@yield('styles')
+	<!-- Custom css -->
 	<link rel="stylesheet" type="text/css" href="{{ asset('ablepro/assets/css/style.css') }}">
+	<link rel="stylesheet" type="text/css" href="{{ asset('ablepro/assets/css/pages.css') }}">
 	<link rel="stylesheet" type="text/css" href="{{ asset('css/my_custom.css') }}">
 </head>
 

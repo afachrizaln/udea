@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Lecturer;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Course;
-use App\Chapter;
+use App\SubChapter;
 
 class MaterialController extends Controller
 {
@@ -19,7 +19,7 @@ class MaterialController extends Controller
     }
 
     public function show($slug){
-        $chapter = Chapter::where('slug', '=' , $slug)->first();
-        return view('lecturer.pages.material.show', compact('chapter'));
+        $subChapter = SubChapter::where('slug', '=' , $slug)->first();
+        return view('lecturer.pages.material.show', compact('subChapter'));
     }
 }
