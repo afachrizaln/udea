@@ -31,7 +31,7 @@
                             <div class="accordion-heading" role="tab" id={{ 'heading' . $key }}>
                                 <h3 class="card-title accordion-title">
                                     <a class="accordion-msg waves-effect waves-dark" data-toggle="collapse" data-parent="#accordion" href={{ '#collapse' . $key }} aria-expanded="true" aria-controls={{ 'collapse' . $key }}>
-                                        {{ $rowCourse->title }}
+                                        {{ strtoupper($rowCourse->title) }}
                                     </a>
                                 </h3>
                             </div>
@@ -48,29 +48,39 @@
                                         <a href="{{ route('lecturer.material.create') }}" class="btn btn-sm btn-primary waves-effect waves-light float-right"><i class="feather icon-plus-circle"></i> Buat Chapter baru</a>
                                         </div>
                                         <br><br>
-                                        <table class="table b-solid requid-table table-xs">
-                                            <tbody class="text-center text-muted">
-                                                @foreach($rowCourse->chapter as $keyChapter => $rowChapter)
-                                                <tr>
-                                                    <td rowspan="{{ $rowChapter->subChapter->count() + 1 }}">{{ ($keyChapter+1) }}</td>
-                                                    <td rowspan="{{ $rowChapter->subChapter->count() + 1 }}">{{ $rowChapter->title }}</td>
-                                                </tr>
-                                                    @foreach($rowChapter->subChapter as $keySubChapter => $rowSubChapter)
-                                                        <tr>
-                                                            <td>{{ ($keyChapter+1) . '.' . ($keySubChapter+1) }}</td>
-                                                            <td>{{ $rowSubChapter->title }}</td>
-                                                            <td>Belum ada file</td>
-                                                            <td>
-                                                                <div class="action-icon">
-                                                                    <a href="{{ route('lecturer.material.show', $rowSubChapter->slug) }}"><i class="feather icon-edit"></i></a>
-                                                                    <a href="#"><i class="feather icon-trash"></i></a>
-                                                                </div>
-                                                            </td>
-                                                        </tr>
+                                        <div class="table-responsive">
+                                            <table class="table b-solid requid-table table-xs">
+                                                <tbody class="text-center text-muted">
+                                                    @foreach($rowCourse->chapter as $keyChapter => $rowChapter)
+                                                    <tr>
+                                                        <td rowspan="{{ $rowChapter->subChapter->count() + 1 }}">{{ ($keyChapter+1) }}</td>
+                                                        <td rowspan="{{ $rowChapter->subChapter->count() + 1 }}">{{ $rowChapter->title }}</td>
+                                                    </tr>
+                                                        @foreach($rowChapter->subChapter as $keySubChapter => $rowSubChapter)
+                                                            <tr>
+                                                                <td>{{ ($keyChapter+1) . '.' . ($keySubChapter+1) }}</td>
+                                                                <td>{{ $rowSubChapter->title }}</td>
+                                                                <td>
+                                                                    @if($rowSubChapter->file != null)
+                                                                    <div class="action-download">
+                                                                        <a href="{{ route('lecturer.material.download', $rowSubChapter->slug) }}" target="__blank"><i class="feather icon-download"></i> {{ $rowSubChapter->file }}</a>
+                                                                    </div>
+                                                                    @else
+                                                                        File tidak tersedia
+                                                                    @endif
+                                                                </td>
+                                                                <td>
+                                                                    <div class="action-icon">
+                                                                        <a href="{{ route('lecturer.material.edit', $rowSubChapter->slug) }}"><i class="feather icon-edit"></i></a>
+                                                                        <a href="#"><i class="feather icon-trash"></i></a>
+                                                                    </div>
+                                                                </td>
+                                                            </tr>
+                                                        @endforeach
                                                     @endforeach
-                                                @endforeach
-                                            </tbody>
-                                        </table>
+                                                </tbody>
+                                            </table>
+                                        </div>
                                     </div>
                                 </div>
                             </div>

@@ -1,8 +1,3 @@
-a:focus, a:hover {
-    text-decoration: none;
-    color: #FF7814;
-}
-
 #toast-container {
     text-align: justify;
     text-justify: inter-word;
@@ -42,7 +37,13 @@ a:focus, a:hover {
     background: #FF7814;
 }
 
-.action-icon a:focus, .action-icon a:hover {
+.action-download a, .action-download a:focus, .action-download a:hover {
+    text-decoration: none;
+    color: #007bff;
+    background: transparent;
+}
+
+.action-icon a, .action-icon a:focus, .action-icon a:hover {
     color: #424242;
     background: transparent;
 }

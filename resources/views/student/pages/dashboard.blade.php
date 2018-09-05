@@ -34,20 +34,7 @@
     </div>
 
     <div class="col-sm-3 task-detail-right">
-        <div class="card">
-            <div class="card-header">
-                <h5 class="card-header-text">Waktu Server</h5>
-                <div class="card-header-right">
-                    <i class="icofont icofont-clock-time"></i>
-                </div>
-            </div>
-            <div class="card-block">
-                <div class="counter">
-                    <div id="date-part"></div>
-                    <div id="time-part"></div>
-                </div>
-            </div>
-        </div>
+        @include('partials.clock')
 
         <div class="card">
             <div class="card-header borderless">
@@ -86,13 +73,6 @@
 @endsection
 
 @section('scripts')
-<!-- moment js -->
-<script type="text/javascript" src="{{ asset('ablepro/bower_components/moment/js/moment.min.js') }}"></script>
-<script type="text/javascript" src="{{ asset('ablepro/bower_components/moment/js/moment-with-locales.js') }}"></script>
-<!-- calender js -->
-<!-- <script type="text/javascript" src="{{ asset('ablepro/bower_components/fullcalendar/js/fullcalendar.min.js') }}"></script>
-<script type="text/javascript" src="{{ asset('ablepro/assets/pages/full-calender/calendar.js') }}"></script> -->
-
 <script>
 $(document).ready(function() {
     $('#calendar').fullCalendar({

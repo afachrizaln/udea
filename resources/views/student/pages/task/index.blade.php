@@ -32,7 +32,7 @@
                             <div class="accordion-heading" role="tab" id={{ 'heading' . $key }}>
                                 <h3 class="card-title accordion-title">
                                     <a class="accordion-msg waves-effect waves-dark" data-toggle="collapse" data-parent="#accordion" href={{ '#collapse' . $key }} aria-expanded="true" aria-controls={{ 'collapse' . $key }}>
-                                        {{ $rowCourse->title }}
+                                        {{ strtoupper($rowCourse->title) }}
                                     </a>
                                 </h3>
                             </div>

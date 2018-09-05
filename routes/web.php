@@ -29,6 +29,8 @@ Route::group(['middleware' => 'user'], function() {
         Route::post('/join', 'Student\ClassroomController@join')->name('student.classroom.join');
 
         Route::get('/material', 'Student\MaterialController@index')->name('student.material');
+        Route::get('/material/download/{slug}', 'Student\MaterialController@download')->name('student.material.download');
+        
         Route::get('/discussion', 'Student\DiscussionController@index')->name('student.discussion');
         Route::get('/discussion/{slug}', 'Student\DiscussionController@show')->name('student.discussion.show');
         Route::post('/discussion/{slug}/comment', 'Student\DiscussionController@comment')->name('student.discussion.comment');
@@ -41,8 +43,12 @@ Route::group(['middleware' => 'user'], function() {
 
         Route::get('/material', 'Lecturer\MaterialController@index')->name('lecturer.material');
         Route::get('/material/create', 'Lecturer\MaterialController@create')->name('lecturer.material.create');
-        Route::get('/material/{slug}', 'Lecturer\MaterialController@show')->name('lecturer.material.show');
+        Route::get('/material/edit/{slug}', 'Lecturer\MaterialController@edit')->name('lecturer.material.edit');
+        Route::post('/material/update/{id}', 'Lecturer\MaterialController@update')->name('lecturer.material.update');
+        Route::get('/material/download/{slug}', 'Lecturer\MaterialController@download')->name('lecturer.material.download');
+        
         Route::get('/discussion', 'Lecturer\DiscussionController@index')->name('lecturer.discussion');
+        
         Route::get('/task', 'Lecturer\TaskController@index')->name('lecturer.task');
         
         Route::get('/course', 'Lecturer\CourseController@index')->name('lecturer.course');

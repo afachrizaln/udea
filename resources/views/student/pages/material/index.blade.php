@@ -32,7 +32,7 @@
                             <div class="accordion-heading" role="tab" id={{ 'heading' . $key }}>
                                 <h3 class="card-title accordion-title">
                                     <a class="accordion-msg waves-effect waves-dark" data-toggle="collapse" data-parent="#accordion" href={{ '#collapse' . $key }} aria-expanded="true" aria-controls={{ 'collapse' . $key }}>
-                                        {{ $rowCourse->title }}
+                                        {{ strtoupper($rowCourse->title) }}
                                     </a>
                                 </h3>
                             </div>
@@ -46,7 +46,7 @@
                                         </div>
                                         @foreach($rowCourse->chapter as $keyChapter => $rowChapter)
                                         <div class="m-b-20">
-                                            <h6 class="sub-title m-b-15">Bab. {{ $rowChapter->title }}</h6>
+                                            <h6 class="sub-title m-b-15">{{ strtoupper('Bab ' . ($keyChapter+1) . '. ' . $rowChapter->title) }}</h6>
                                             <div class="row">
                                                 <div class="col-md-4">
                                                         <p align="justify">
@@ -62,7 +62,15 @@
                                                                     <td>{{ ($keyChapter+1) . '.' . ($keySubChapter+1) }}</td>
                                                                     <td>{{ $rowSubChapter->title }}</td>
                                                                     <td> <i class="icofont icofont-ui-calendar"></i>&nbsp; {{ $rowSubChapter->created_at }}</td>
-                                                                    <td><div class="action-icon"><a href="#"><i class="feather icon-download"></i></a></div></td>
+                                                                    <td>
+                                                                        @if($rowSubChapter->file != null)
+                                                                        <div class="action-download">
+                                                                            <a href="{{ route('student.material.download', $rowSubChapter->slug) }}" target="__blank"><i class="feather icon-download"></i> {{ $rowSubChapter->file }}</a>
+                                                                        </div>
+                                                                        @else
+                                                                            File tidak tersedia
+                                                                        @endif
+                                                                    </td>
                                                                 </tr>
                                                                 @endforeach
                                                             </tbody>
