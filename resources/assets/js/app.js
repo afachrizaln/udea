@@ -15,3 +15,6 @@ window.jqueryslimscroll = require('jquery-slimscroll');
 window.toastr = require('toastr');
 
 window.fullcalendar = require('fullcalendar');
+
+require('datatables.net');
+require('datatables.net-buttons');

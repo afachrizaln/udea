@@ -295,7 +295,7 @@
     <![endif]-->
 	<!-- Warning Section Ends -->
 	<!-- app js -->
-	<script type="text/javascript" src=" {{ asset('js/app.js') }}"></script>
+	<script type="text/javascript" src="{{ asset('js/app.js') }}"></script>
 	<!-- waves js -->
 	<script src="{{ asset('ablepro/assets/pages/waves/js/waves.min.js') }}"></script>
 	<!-- pcoded js -->

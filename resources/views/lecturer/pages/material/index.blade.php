@@ -21,7 +21,7 @@
 
 @section('content')
 <div class="row">
-    <div class="col-sm-12">
+    <div class="col-lg-9">
         <div class="card">
             @if($courses->isNotEmpty())
                 <div class="card-block color-accordion-block">
@@ -94,6 +94,12 @@
                 <h6>Belum ada kelas yang diambil.</h6>
             </div>
         @endif
+    </div>
+
+    <div class="col-lg-3 task-detail-right">
+        <div class="affix">
+            @include('partials.clock')
+        <div>
     </div>
 </div>
 @endsection

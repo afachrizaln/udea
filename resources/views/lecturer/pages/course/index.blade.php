@@ -30,7 +30,7 @@
         <div class="card">
             <div class="card-block">
                 <div class="dt-responsive table-responsive">
-                    <table id="course-table" class="table table-striped table-bordered nowrap">
+                    <table id="course-table" class="table    table-bordered nowrap">
                         <thead>
                             <tr>
                                 <th align="center">No.</th>
@@ -64,11 +64,7 @@
 
 @section('scripts')
 <!-- data-table js -->
-<script src="{{ asset('ablepro/bower_components/datatables.net/js/jquery.dataTables.min.js') }}"></script>
-<script src="{{ asset('ablepro/bower_components/datatables.net-buttons/js/dataTables.buttons.min.js') }}"></script>
-<script src="{{ asset('ablepro/bower_components/datatables.net-bs4/js/dataTables.bootstrap4.min.js') }}"></script>
-<script src="{{ asset('ablepro/bower_components/datatables.net-responsive/js/dataTables.responsive.min.js') }}"></script>
-<script src="{{ asset('ablepro/bower_components/datatables.net-responsive-bs4/js/responsive.bootstrap4.min.js') }}"></script>
+<script type="text/javascript" src="{{ asset('js/datatable.js') }}"></script>
 
 <script>
     $('#course-table').DataTable({
